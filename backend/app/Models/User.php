@@ -38,10 +38,20 @@ class User extends Authenticatable
     }
 
     /**
-     * Verifica si el usuario posee el rol de administrador/jefe.
-     * * @return boolean True si el rol es 'jefe', false en caso contrario.
+     * Relación: Un usuario puede trabajar en muchos proyectos (N:M).
+     * Un proyecto puede tener muchos usuarios asignados.
+     * @return BelongsToMany Lista de proyectos en los que trabaja el usuario
      */
-    public function isJefe(): boolean
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_users');
+    }
+
+    /**
+     * Verifica si el usuario posee el rol de administrador/jefe.
+     * * @return bool True si el rol es 'jefe', false en caso contrario.
+     */
+    public function isJefe(): bool
     {
         // Compara el atributo role del modelo con la cadena 'jefe'.
         return $this->role === 'jefe';
@@ -49,22 +59,11 @@ class User extends Authenticatable
 
     /**
      * Verifica si el usuario es un empleado 
-     * * @return boolean True si el rol es 'trabajador', false en caso contrario.
+     * * @return bool True si el rol es 'trabajador', false en caso contrario.
      */
-    public function isWorker(): boolean
+    public function isWorker(): bool
     {
         // Verifica si la cadena coincide exactamente con 'trabajador'.
         return $this->role === 'trabajador';
-    }
-
-    /**
-     * Obtiene las habilidades del usuario.
-     * * @return BelongsToMany Relación muchos a muchos con Skill.
-     */
-    public function skills(): BelongsToMany
-    {
-        return $this->belongsToMany(Skill::class)
-            ->withPivot('proficiency_level')
-            ->withTimestamps();
     }
 }
