@@ -1,6 +1,10 @@
 import './LoadingSpinner.css';
 
-const LoadingSpinner = ({ message = "Cargando sesiones..." }) => {
+interface LoadingSpinnerProps {
+  message?: string; // Mensaje opcional para mostrar debajo del spinner
+}
+
+const LoadingSpinner = ({ message = "Cargando sesiones..." }: LoadingSpinnerProps) => {
   return (
     <div className="spinner">
       <div className="loader"></div>

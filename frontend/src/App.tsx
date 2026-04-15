@@ -1,4 +1,3 @@
-// Routes y Route: componentes de React Router para definir rutas
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import AppLayout from "./layout/AppLayout";
@@ -6,10 +5,12 @@ import ProtectedRoute from "./routing/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import SessionsPage from "./pages/SessionsPage";
+import ProyectsPage from "./pages/ProjectsPage";
 import SessionDetailPage from "./pages/SessionDetailPage";
-import SessionCreatePage from "./pages/SessionCreatePage";
+import ProjectCreatePage from "./pages/ProjectCreatePage";
 import SessionEditPage from "./pages/SessionEditPage";
+import TaskCreatePage from "./pages/TaskCreatePage";
+import TaskEditPage from "./pages/TaskEditPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -24,10 +25,12 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
 
         {/* ---- RUTAS PROTEGIDAS ---- */}
-        <Route path="/sessions" element={<ProtectedRoute> <SessionsPage />  </ProtectedRoute>} />
-        <Route path="/sessions/new" element={ <ProtectedRoute> <SessionCreatePage /> </ProtectedRoute>} />
+        <Route path="/projects" element={<ProtectedRoute> <ProyectsPage />  </ProtectedRoute>} />
+        <Route path="/projects/new" element={ <ProtectedRoute> <ProjectCreatePage /> </ProtectedRoute>} />
         <Route path="/sessions/:id" element={ <ProtectedRoute> <SessionDetailPage /> </ProtectedRoute>} />
         <Route path="/sessions/:id/edit" element={<ProtectedRoute> <SessionEditPage /> </ProtectedRoute>} />
+        <Route path="/sessions/:id/tasks/new" element={<ProtectedRoute> <TaskCreatePage /> </ProtectedRoute>} />
+        <Route path="/sessions/:id/tasks/:taskId/edit" element={<ProtectedRoute> <TaskEditPage /> </ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
 
         {/* ---- RUTA 404 ---- */}

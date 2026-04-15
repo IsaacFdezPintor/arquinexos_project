@@ -1,4 +1,6 @@
 import { useAuth } from "../auth/authContext";
+import { User, Mail, Key } from "lucide-react";
+import "./ProfilePage.css";
 
 export default function ProfilePage() {
   // Extraemos el usuario del contexto
@@ -10,19 +12,40 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <div className="profile-card">
-        {/* Avatar simple con emoji */}
-        <div className="profile-card__avatar">👤</div>
-        {/* Nombre del usuario */}
-        <h1 className="profile-card__name">{user.name}</h1>
-        {/* Email del usuario */}
-        <p className="profile-card__email">{user.email}</p>
-        {/* Línea divisoria */}
-        <div className="profile-card__divider" />
-        {/* ID del usuario */}
-        <div className="profile-card__info">
-          <span className="profile-card__label">ID de usuario</span>
-          <span className="profile-card__value">{user.id}</span>
+      <div className="profile-container">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            <div className="user-avatar">{user?.name?.charAt(0).toUpperCase() || "U"}</div>
+          </div>
+          <div className="profile-header-text">
+            <h1 className="profile-name">{user.name}</h1>
+            <p className="profile-role">Usuario del sistema</p>
+          </div>
+        </div>
+
+        <div className="profile-divider" />
+
+        <div className="profile-info-grid">
+          <div className="profile-info-item">
+            <div className="profile-info-icon">
+              <Mail size={20} />
+            </div>
+            <div className="profile-info-content">
+              <span className="profile-info-label">Correo Electrónico</span>
+              <span className="profile-info-value">{user.email}</span>
+            </div>
+          </div>
+
+          <div className="profile-info-item">
+            <div className="profile-info-icon">
+              <Key size={20} />
+            </div>
+            <div className="profile-info-content">
+              <span className="profile-info-label">ROL</span>
+              <span className="profile-info-value">{user.role}</span>
+            </div>
+            
+          </div>
         </div>
       </div>
     </div>

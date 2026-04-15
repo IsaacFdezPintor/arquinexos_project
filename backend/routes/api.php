@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 // Aquí llamamos a los "Controladores" (los que ejecutan las órdenes)
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectUserController;
-use App\Http\Controllers\Api\PhaseController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TaskSubmissionController;
 use App\Http\Controllers\Api\TimeLogController;
@@ -30,16 +29,17 @@ Route::middleware('auth:sanctum')->group(function () {
     // Ver solo MIS tareas (Si soy trabajador)
     Route::get('tasks/my-tasks', [TaskController::class, 'myTasks']);
     
+    // Tareas de un proyecto específico
+    Route::get('projects/{project}/tasks', [TaskController::class, 'getByProject']);
+    
     // Estas son "Súper Rutas" (apiResource). 
     // Laravel crea automáticamente 5 rutas: Ver todos, Crear uno, Ver uno solo, Editar y Borrar.
-    /* Route::apiResource('projects', ProjectController::class);       // Gestión de proyectos
-    Route::apiResource('phases', PhaseController::class);           // Gestión de fases
+    Route::apiResource('projects', ProjectController::class);       // Gestión de proyectos
     Route::apiResource('tasks', TaskController::class);             // Gestión de tareas
     Route::apiResource('task-submissions', TaskSubmissionController::class); // Entregas de tareas
     Route::apiResource('time-logs', TimeLogController::class);       // Fichajes de tiempo
     Route::apiResource('skills', SkillController::class);           // Habilidades
     Route::apiResource('users', UserController::class);             // Gestión de usuarios
-    */
     // Rutas para gestionar usuarios en proyectos (Relación N:M)
     Route::get('projects/{project}/users', [ProjectUserController::class, 'index']);        // Ver usuarios del proyecto
     Route::post('projects/{project}/users', [ProjectUserController::class, 'store']);       // Asignar usuario al proyecto

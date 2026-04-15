@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { PhotoSession, SessionStatus } from "../../types/Session";
+import type { PhotoSession, SessionStatus } from "../../types/Project";
 import Button from "../Button/Button";
 import { FileText, User, List, Calendar, MapPin, DollarSign, CheckCircle, MessageSquare, Zap, MapIcon } from "lucide-react";
 import "./SessionForm.css";
@@ -30,31 +30,34 @@ export default function SessionForm({
   updateSession,
   cancelUpdateSession,
 }: SessionFormProps) {
-  const [name, setName] = useState(sessionSeleccionada?.title ?? "");
-  const [type, setType] = useState(sessionSeleccionada?.category ?? PROJECT_TYPES[0]);
-  const [clientName, setClientName] = useState(sessionSeleccionada?.client ?? "");
+  const [name, setName] = useState(sessionSeleccionada?.name ?? "");
+  const [type, setType] = useState(sessionSeleccionada?.type ?? PROJECT_TYPES[0]);
+  const [clientName, setClientName] = useState(sessionSeleccionada?.client_name ?? "");
   const [status, setStatus] = useState<SessionStatus>(sessionSeleccionada?.status ?? "pendiente");
-  const [budget, setBudget] = useState(sessionSeleccionada?.price ?? 0);
-  const [startDate, setStartDate] = useState(sessionSeleccionada?.date ?? "");
-  const [endDate, setEndDate] = useState(sessionSeleccionada?.location ?? "");
-  const [address, setAddress] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [description, setDescription] = useState(sessionSeleccionada?.notes ?? "");
+  const [budget, setBudget] = useState(sessionSeleccionada?.budget ?? 0);
+  const [startDate, setStartDate] = useState(sessionSeleccionada?.start_date ?? "");
+  const [endDate, setEndDate] = useState(sessionSeleccionada?.end_date ?? "");
+  const [address, setAddress] = useState(sessionSeleccionada?.address ?? "");
+  const [latitude, setLatitude] = useState(sessionSeleccionada?.latitude?.toString() ?? "");
+  const [longitude, setLongitude] = useState(sessionSeleccionada?.longitude?.toString() ?? "");
+  const [description, setDescription] = useState(sessionSeleccionada?.description ?? "");
 
   function handleSubmit() {
     if (name.trim().length > 0 && clientName.trim().length > 0) {
       if (sessionSeleccionada != null) {
         const nuevoProyecto: PhotoSession = {
           ...sessionSeleccionada,
-          title: name,
-          category: type,
-          client: clientName,
+          name,
+          type,
+          client_name: clientName,
           status,
-          price: budget,
-          date: startDate,
-          location: address,
-          notes: description,
+          budget,
+          start_date: startDate,
+          end_date: endDate,
+          address,
+          latitude: latitude ? parseFloat(latitude) : undefined,
+          longitude: longitude ? parseFloat(longitude) : undefined,
+          description,
         };
         updateSession(nuevoProyecto);
       } else {

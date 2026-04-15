@@ -21,7 +21,7 @@ class Task extends Model
      * Se incluyen por seguridad para evitar ataques de inyección de datos.
      */
     protected $fillable = [
-        'project_id', 'phase_id', 'assigned_user_id', 'name', 'description',
+        'project_id', 'assigned_user_id', 'name', 'description',
         'status', 'priority', 'assigned_user_email', 'assigned_user_name',
         'estimated_hours', 'start_date', 'end_date',
     ];
@@ -43,15 +43,6 @@ class Task extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
-    }
-
-    /**
-     * Define la relación con el modelo Phase.
-     * * @return BelongsTo Relación de muchos a uno con Phase.
-     */
-    public function phase(): BelongsTo
-    {
-        return $this->belongsTo(Phase::class);
     }
 
 }

@@ -2,15 +2,16 @@
 // StatusBadge.tsx — Insignia de estado con color
 // =============================================
 
-import type { SessionStatus } from "../../types/Session";
+import type { SessionStatus } from "../../types/Project";
+import { Clock, CheckCircle, CheckCircle2, XCircle } from "lucide-react";
 import './StatusBadge.css';
 
-// Configuración de cada estado: texto y clase CSS
-const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string }> = {
-  pendiente:   { label: "Pendiente",   className: "badge--pending" },    // Amarillo
-  confirmada:  { label: "Confirmada",  className: "badge--confirmed" },  // Azul
-  completada:  { label: "Completada",  className: "badge--completed" },  // Verde
-  cancelada:   { label: "Cancelada",   className: "badge--cancelled" },  // Rojo
+// Configuración de cada estado: texto, clase CSS e icono
+const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string; Icon: React.ReactNode }> = {
+  pendiente:   { label: "Pendiente",   className: "badge--pending",   Icon: <Clock size={12} /> },
+  confirmada:  { label: "Confirmada",  className: "badge--confirmed", Icon: <CheckCircle size={12} /> },
+  completada:  { label: "Completada",  className: "badge--completed", Icon: <CheckCircle2 size={12} /> },
+  cancelada:   { label: "Cancelada",   className: "badge--cancelled", Icon: <XCircle size={12} /> },
 };
 
 // Props del componente
@@ -23,7 +24,8 @@ export default function StatusBadge({status}: StatusBadgeProps) {
 
   return (
     <span className={`badge ${cfg.className}`}>
-      {cfg.label}
+      {cfg.Icon}
+      <span>{cfg.label}</span>
     </span>
   );
 }

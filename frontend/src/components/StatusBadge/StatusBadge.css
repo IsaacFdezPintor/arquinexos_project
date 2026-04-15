@@ -1,45 +1,74 @@
 /* =============================================
-   StatusBadge.css — Estilos para StatusBadge
+   StatusBadge.css — Insignias de Estado Modernas
    ============================================= */
 
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
   font-weight: 600;
-  border-radius: 9999px; /* píldora redondeada */
-  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
   font-size: 0.75rem;
-  text-align: center;
   white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.badge:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
 }
 
 /* Tamaños */
 .badge--sm {
   font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.65rem;
 }
 
 .badge--md {
-  font-size: 0.875rem;
-  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
 }
 
 /* Colores por estado */
 .badge--pending {
-  background-color: #fef3c7; /* amarillo claro */
-  color: #b45309; /* amarillo oscuro */
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid rgba(146, 64, 14, 0.1);
+}
+
+.badge--pending:hover {
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
 }
 
 .badge--confirmed {
-  background-color: #bfdbfe; /* azul claro */
-  color: #1d4ed8; /* azul oscuro */
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+  color: #1d4ed8;
+  border: 1px solid rgba(29, 78, 216, 0.1);
+}
+
+.badge--confirmed:hover {
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
 }
 
 .badge--completed {
-  background-color: #d1fae5; /* verde claro */
-  color: #065f46; /* verde oscuro */
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid rgba(6, 95, 70, 0.1);
+}
+
+.badge--completed:hover {
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
 }
 
 .badge--cancelled {
-  background-color: #fee2e2; /* rojo claro */
-  color: #b91c1c; /* rojo oscuro */
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #b91c1c;
+  border: 1px solid rgba(185, 28, 28, 0.1);
+}
+
+.badge--cancelled:hover {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
 }

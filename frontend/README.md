@@ -1,9 +1,8 @@
-#  PixelTrap — Gestión de Sesiones Fotográficas
+# PixelTrap — Gestión de Sesiones Fotográficas
 
 **Isaac Fernández Pintor**
 
-
-##  Instalación
+## Instalación
 
 ```bash
 # 1. Clonar / descomprimir el proyecto
@@ -23,16 +22,16 @@ El frontend estará en **http://localhost:5173** y el backend en **http://localh
 
 ---
 
-##  Usuarios de prueba
+## Usuarios de prueba
 
-| Email | Contraseña |
-|---|---|
-| `usuario@gmail.com` | `usuario` |
-| `admin@gmail.com` | `admin` |
+| Email                 | Contraseña    |
+| --------------------- | -------------- |
+| `usuario@gmail.com` | `usuario`    |
+| admin                 | `admin.1234` |
 
 ---
 
-##  Variables de entorno
+## Variables de entorno
 
 Crear un archivo `.env` (ya incluido) con:
 
@@ -42,24 +41,22 @@ VITE_API_URL=http://localhost:3000
 
 ---
 
-##  Checklist de requisitos
+## Checklist de requisitos
 
-- [x] Aplicación SPA con React + TypeScript
-- [x] Consumo de API REST con Axios
-- [x] CRUD completo (crear, leer, actualizar, eliminar)
-- [x] Autenticación JWT (login, registro, token en headers)
-- [x] Rutas públicas (Home, Login, Registro)
-- [x] Rutas privadas (Sesiones, Perfil)
-- [x] Página 404 (ruta comodín `*`)
-- [x] Context API para gestión de autenticación
-- [x] Componentes reutilizables (Button, Input, Card, Modal, Toast, etc.)
-- [x] Custom hooks (`useToast`)
-- [x] Gestión de estados de carga (LoadingSpinner)
-- [x] Gestión de errores (toasts de error, validaciones)
-- [x] Modales de confirmación (eliminación)
-- [x] Filtros y búsqueda
-- [x] Diseño responsive
-- [x] Navegación con React Router v7
-- [x] Backend dockerizado
-
-
+- [X] Aplicación SPA con React + TypeScript
+- [X] Consumo de API REST con Axios
+- [X] CRUD completo (crear, leer, actualizar, eliminar)
+- [X] Autenticación JWT (login, registro, token en headers)
+- [X] Rutas públicas (Home, Login, Registro)
+- [X] Rutas privadas (Sesiones, Perfil)
+- [X] Página 404 (ruta comodín `*`)
+- [X] Context API para gestión de autenticación
+- [X] Componentes reutilizables (Button, Input, Card, Modal, Toast, etc.)
+- [X] Custom hooks (`useToast`)
+- [X] Gestión de estados de carga (LoadingSpinner)
+- [X] Gestión de errores (toasts de error, validaciones)
+- [X] Modales de confirmación (eliminación)
+- [X] Filtros y búsqueda
+- [X] Diseño responsive
+- [X] Navegación con React Router v7
+- [X] Backend dockerizado

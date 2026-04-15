@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/authContext";
 import { AuthService } from "../services/authService";
 import { isAxiosError } from "axios";
-import { UserPlus, Mail, Lock, User, Shield } from "lucide-react";
+import { Mail, Lock, User, Shield } from "lucide-react";
 import Button from "../components/Button/Button";
 
 const authService = AuthService;
@@ -15,7 +15,6 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
   const [role, setRole] = useState("trabajador");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,16 +26,14 @@ export default function RegisterPage() {
       setError("Completa todos los campos");
       return;
     }
-    if (password !== confirm) {
-      setError("Las contraseñas no coinciden");
-      return;
-    }
-    if (password.length < 4) {
-      setError("La contraseña debe tener al menos 4 caracteres");
+
+    if (password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres");
       return;
     }
 
     setLoading(true);
+    
     try {
       const res = await authService.register(email, password, name, role);
       login({ token: res.token, user: res.user });
@@ -130,43 +127,14 @@ export default function RegisterPage() {
             id="password"
             type="password"
             className="auth-form__input"
-            placeholder="Mínimo 4 caracteres"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {/* Input Contraseña */}
-        <div className="auth-form__group">
-          <label htmlFor="password" className="auth-form__label">
-            <Lock size={16} /> Contraseña
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="auth-form__input"
-            placeholder="Mínimo 4 caracteres"
+            placeholder="Mínimo 8 caracteres"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
 
-        {/* Input Confirmar Contraseña */}
-        <div className="auth-form__group">
-          <label htmlFor="confirm" className="auth-form__label">
-            <Lock size={16} /> Confirmar contraseña
-          </label>
-          <input
-            id="confirm"
-            type="password"
-            className="auth-form__input"
-            placeholder="Repite tu contraseña"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            required
-          />
-        </div>
+        
 
         {/* Botón Submit */}
         

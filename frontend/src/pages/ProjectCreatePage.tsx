@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sessionService } from "../services/sessionService";
-import SessionForm from "../components/SessionForm/SessionForm";
-import { ToastContainer } from "../components/Toast/Toast";
+import { sessionService } from "../services/projectService.ts";
+import SessionForm from "../components/SessionForm/SessionForm.tsx";
+import { ToastContainer } from "../components/Toast/Toast.tsx";
 import { useToast } from "../components/Toast/useToast.tsx";
-import { Plus, ArrowLeft } from "lucide-react";
 
 export default function SessionCreatePage() {
   const navigate = useNavigate();
@@ -16,10 +15,10 @@ export default function SessionCreatePage() {
     setLoading(true);
     try {
       await sessionService.create(data);
-      addToast("Sesión creada correctamente", "success");
+      addToast("Proyecto creado correctamente", "success");
       setTimeout(() => navigate("/sessions"), 400);
     } catch {
-      addToast("Error al crear la sesión", "error");
+      addToast("Error al crear el proyecto", "error");
       setLoading(false);
     }
   };

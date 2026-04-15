@@ -12,9 +12,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->has('no_paginate')) {
-            return response()->json(User::with('timeLogs', 'tasks')->get(), 200);
+            return response()->json(User::all(), 200);
         }
-        return response()->json(User::with('timeLogs', 'tasks')->paginate(15), 200);
+        return response()->json(User::paginate(15), 200);
     }
 
     public function team(Request $request)
@@ -59,7 +59,7 @@ class UserController extends Controller
 
      public function show(User $user)
     {
-        return response()->json($user->load(['timeLogs', 'tasks']), 200);
+        return response()->json($user->load(['tasks', 'projects']), 200);
     }
 
     public function update(Request $request, User $user)

@@ -86,7 +86,7 @@ class ProjectController extends Controller
     {
         // Se cargan también las relaciones del proyecto
         return response()->json(
-            $project->load(['phases', 'tasks']),
+            $project->load(['tasks']),
             200
         );
     }

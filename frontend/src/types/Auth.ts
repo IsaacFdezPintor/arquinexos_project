@@ -1,7 +1,8 @@
 export type User = {
   id: number;     
   email: string; 
-  name: string;   
+  name: string; 
+  role: "TRABAJADOR" | "JEFE";  
 };
 
 export type AuthSession = {

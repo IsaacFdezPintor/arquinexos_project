@@ -1,0 +1,54 @@
+/* =============================================
+   SessionList.css — Lista de Proyectos
+   ============================================= */
+
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 2rem;
+  animation: slideIn 0.3s ease;
+}
+
+.session-list-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.session-list-container p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.session-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.session-list-empty p {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .session-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .session-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

@@ -17,9 +17,6 @@ return new class extends Migration
             // RELACIONES (Claves Foráneas):
             // Conecta con la tabla de proyectos. Si se borra el proyecto, se borran sus tareas (cascadeOnDelete).
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
-            
-            // Conecta con las fases. Si se borra la fase, la tarea sigue existiendo pero sin fase (nullOnDelete).
-            $table->foreignId('phase_id')->nullable()->constrained('phases')->nullOnDelete();
 
             // Conecta con el usuario asignado. Si se borra el usuario, la tarea queda sin asignar (nullOnDelete).
             $table->foreignId('assigned_user_id')->nullable()->constrained('users')->nullOnDelete();
@@ -28,7 +25,7 @@ return new class extends Migration
             $table->string('name'); // Título de la tarea
             $table->text('description')->nullable(); // Descripción larga (puede estar vacía)
             $table->string('status'); // Estado: Ej. "Pendiente", "En curso", "Terminada"
-            $table->string('priority'); // Prioridad: Ej. "Baja", "Media", "Alta"
+            $table->string('priority')->nullable(); // Prioridad: Ej. "Baja", "Media", "Alta"
 
             // DATOS DEL TRABAJADOR (Opcionales - REDUNDANTES, se mantienen por compatibilidad):
             $table->string('assigned_user_email')->nullable(); // Guardamos el email del responsable

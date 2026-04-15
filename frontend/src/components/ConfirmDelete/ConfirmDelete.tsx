@@ -1,20 +1,14 @@
-// =============================================
-// ConfirmDelete.tsx — Contenido del modal de confirmación
-// =============================================
-
 import Button from "../Button/Button";
 import './ConfirmDelete.css';
 
 type ConfirmDeleteProps = {
-  title: string;              // Título de la sesión a eliminar
-  loading: boolean;           // ¿Se está procesando la eliminación?
-  onConfirm: () => void;      // Callback al confirmar
-  onCancel: () => void;       // Callback al cancelar
+  title: string;              
+  onConfirm: () => void;     
+  onCancel: () => void;      
 };
 
 export default function ConfirmDelete({
   title,
-  loading,
   onConfirm,
   onCancel,
 }: ConfirmDeleteProps) {
@@ -23,14 +17,14 @@ export default function ConfirmDelete({
 
       {/* Mensaje de advertencia */}
       <p className="confirm-delete__text">
-        ¿Estás seguro de que quieres eliminar la sesión{" "}
+        ¿Estás seguro de que quieres eliminar {" "}
         <strong>«{title}»</strong>? Esta acción no se puede deshacer.
       </p>
 
       {/* Botones de acción */}
       <div className="confirm-delete__actions">
-        <Button texto="Cancelar" onClick={onCancel} estilo="gris" / >
-        <Button texto="Eliminar" onClick={onConfirm} estilo="rojo" deshabilitar={loading}/>
+        <Button text="Cancelar" onClick={onCancel} style="gris" / >
+        <Button text="Eliminar" onClick={onConfirm} style="rojo" />
       </div>
     </div>
   );

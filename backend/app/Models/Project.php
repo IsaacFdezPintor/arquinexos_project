@@ -40,11 +40,6 @@ class Project extends Model
     }
 
 
-    public function phases(): HasMany
-    {
-        return $this->hasMany(Phase::class);
-    }
-
     /**
      * Relación: Un proyecto tiene muchos usuarios (N:M).
      * Los usuarios pueden trabajar en múltiples proyectos.

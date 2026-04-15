@@ -24,7 +24,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Task::with(['assignedUser', 'phase', 'project']);
+        $query = Task::with(['assignedUser', 'project']);
 
         if ($request->query('no_paginate')) {
             return response()->json($query->get(), 200);
@@ -44,7 +44,7 @@ class TaskController extends Controller
         $user = $request->user();
         
         $tasks = Task::where('assigned_user_id', $user->id)
-            ->with(['phase', 'project'])
+            ->with(['project'])
             ->get();
 
         return response()->json($tasks, 200);
@@ -79,13 +79,16 @@ class TaskController extends Controller
         // Se comprueba que los datos recibidos cumplen las reglas necesarias
         $validated = $request->validate([
             'project_id' => ['required', 'exists:projects,id'],
-            'phase_id' => ['nullable', 'exists:phases,id'],
             'assigned_user_id' => ['nullable', 'exists:users,id'],
             'name' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string'],
-            'priority' => ['required', 'string'],
+            'priority' => ['nullable', 'string'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
+            'description' => ['nullable', 'string'],
+            'assigned_user_email' => ['nullable', 'email'],
+            'assigned_user_name' => ['nullable', 'string'],
+            'estimated_hours' => ['nullable', 'numeric'],
         ]);
 
         // LÓGICA DE NEGOCIO
@@ -112,7 +115,7 @@ class TaskController extends Controller
 
         // Se devuelve la tarea creada junto con sus relaciones
         return response()->json(
-            $task->load(['assignedUser', 'project', 'phase']),
+            $task->load(['assignedUser', 'project']),
             201
         );
     }
@@ -130,7 +133,78 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         return response()->json(
-            $task->load(['project', 'phase', 'assignedUser', 'timeLogs']),
+            $task->load(['project', 'assignedUser']),
+            200
+        );
+    }
+
+    /**
+     * Actualizar una tarea existente.
+     * 
+     * Solo los usuarios con rol de "jefe" pueden actualizar tareas.
+     * Se valida que el trabajador no tenga conflictos de fechas.
+     *
+     * @param Request $request Datos a actualizar
+     * @param Task $task Tarea a actualizar
+     * @return \Illuminate\Http\JsonResponse Tarea actualizada
+     */
+    public function update(Request $request, Task $task)
+    {
+        // Obtener el usuario autenticado
+        $user = $request->user();
+
+        // Verificar si el usuario está autenticado
+        if (!$user) {
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
+
+        // Verificar que el usuario tenga rol de jefe
+        if (!$user->isJefe()) {
+            return response()->json(['error' => 'Solo los jefes pueden actualizar tareas'], 403);
+        }
+
+        // VALIDACIÓN DE DATOS
+        $validated = $request->validate([
+            'project_id' => ['required', 'exists:projects,id'],
+            'assigned_user_id' => ['nullable', 'exists:users,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'string'],
+            'priority' => ['nullable', 'string'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
+            'description' => ['nullable', 'string'],
+            'assigned_user_email' => ['nullable', 'email'],
+            'assigned_user_name' => ['nullable', 'string'],
+            'estimated_hours' => ['nullable', 'numeric'],
+        ]);
+
+        // LÓGICA DE NEGOCIO
+        // Se comprueba que el trabajador no tenga otra tarea que se solape en las fechas
+        // (excepto la tarea actual que se está actualizando)
+        if (isset($validated['assigned_user_id']) && isset($validated['start_date']) && isset($validated['end_date'])) {
+
+            // Se busca si existe otra tarea que se solape con las fechas indicadas
+            $overlap = Task::where('assigned_user_id', $validated['assigned_user_id'])
+                ->where('id', '!=', $task->id) // Excluir la tarea actual
+                ->where('status', '!=', 'completada')
+                ->where('start_date', '<=', $validated['end_date'])
+                ->where('end_date', '>=', $validated['start_date'])
+                ->first();
+
+            // Si existe una tarea en esas fechas se devuelve un error
+            if ($overlap) {
+                return response()->json([
+                    'error' => 'Este trabajador ya está ocupado con la tarea: ' . $overlap->name
+                ], 422);
+            }
+        }
+
+        // ACTUALIZACIÓN DE LA TAREA
+        $task->update($validated);
+
+        // Se devuelve la tarea actualizada con sus relaciones
+        return response()->json(
+            $task->load(['assignedUser', 'project']),
             200
         );
     }
@@ -155,5 +229,20 @@ class TaskController extends Controller
         $task->delete();
 
         return response()->json(['message' => 'Tarea eliminada'], 200);
+    }
+
+    /**
+     * Obtener tareas de un proyecto específico.
+     * 
+     * @param int $projectId ID del proyecto
+     * @return \Illuminate\Http\JsonResponse Tareas del proyecto
+     */
+    public function getByProject($projectId)
+    {
+        $tasks = Task::where('project_id', $projectId)
+            ->with(['assignedUser', 'project'])
+            ->get();
+
+        return response()->json($tasks, 200);
     }
 }
