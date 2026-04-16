@@ -6,9 +6,8 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProyectsPage from "./pages/ProjectsPage";
-import SessionDetailPage from "./pages/SessionDetailPage";
-import ProjectCreatePage from "./pages/ProjectCreatePage";
-import SessionEditPage from "./pages/SessionEditPage";
+import SessionDetailPage from "./pages/ProjectDetailPage";
+import ProjectFormPage from "./pages/ProjectFormPage";
 import TaskCreatePage from "./pages/TaskCreatePage";
 import TaskEditPage from "./pages/TaskEditPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -26,11 +25,11 @@ export default function App() {
 
         {/* ---- RUTAS PROTEGIDAS ---- */}
         <Route path="/projects" element={<ProtectedRoute> <ProyectsPage />  </ProtectedRoute>} />
-        <Route path="/projects/new" element={ <ProtectedRoute> <ProjectCreatePage /> </ProtectedRoute>} />
-        <Route path="/sessions/:id" element={ <ProtectedRoute> <SessionDetailPage /> </ProtectedRoute>} />
-        <Route path="/sessions/:id/edit" element={<ProtectedRoute> <SessionEditPage /> </ProtectedRoute>} />
-        <Route path="/sessions/:id/tasks/new" element={<ProtectedRoute> <TaskCreatePage /> </ProtectedRoute>} />
-        <Route path="/sessions/:id/tasks/:taskId/edit" element={<ProtectedRoute> <TaskEditPage /> </ProtectedRoute>} />
+        <Route path="/projects/new" element={ <ProtectedRoute> <ProjectFormPage /> </ProtectedRoute>} />
+        <Route path="/projects/:id" element={ <ProtectedRoute> <SessionDetailPage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/edit" element={<ProtectedRoute> <ProjectFormPage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/tasks/new" element={<ProtectedRoute> <TaskCreatePage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/tasks/:taskId/edit" element={<ProtectedRoute> <TaskEditPage /> </ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
 
         {/* ---- RUTA 404 ---- */}

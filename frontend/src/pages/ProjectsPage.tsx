@@ -47,7 +47,7 @@ export default function ProjectsPage() {
 
   // Selleciona al proyecto a editar y navega a la página de edición
   const handleEdit = (project: GrantTrap) => {
-    navigate(`/projects/${project.id}/edit`);
+    navigate(`/projects/${project.id}/edit`, { state: { project } });
   };
 
   const handleDeleteConfirm = async () => {

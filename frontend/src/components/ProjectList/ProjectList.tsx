@@ -10,7 +10,7 @@ type ProjectListProps = {
   onEdit: (project: GrantTrap) => void;
 };
 
-export default function ProjectList({
+function ProjectList({
   projects,
   loading,
   deletingId,
@@ -47,3 +47,4 @@ export default function ProjectList({
     </div>
   );
 }
+export default ProjectList;

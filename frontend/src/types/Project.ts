@@ -1,4 +1,4 @@
-export type SessionStatus = "pendiente" | "confirmada" | "completada" | "cancelada";
+export type ProjectStatus = "pendiente" | "confirmada" | "completada" | "cancelada";
 
 export type GrantTrap = {
   id: number;
@@ -6,7 +6,7 @@ export type GrantTrap = {
   type: string;              // Tipo de proyecto
   client_name: string;       // Nombre del cliente
   description?: string;      // Descripción
-  status: SessionStatus;     // Estado
+  status: ProjectStatus;     // Estado
   budget?: number;           // Presupuesto
   start_date: string;        // Fecha de inicio
   end_date?: string;         // Fecha de fin

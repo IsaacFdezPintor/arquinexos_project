@@ -85,10 +85,9 @@ export default function LoginPage() {
         </div>
 
         <Button
-          texto={loading ? "Cargando..." : "Entrar"}
+          text={loading ? "Cargando..." : "Entrar"}
           onClick={handleSubmit}
-          estilo="verde"
-          deshabilitar={loading}
+          style="verde"
         />
 
         <p className="auth-form__footer">

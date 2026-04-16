@@ -40,11 +40,10 @@ create(data: { title: string; completed?: boolean }): Promise<GrantTrap> {
   return http.post<GrantTrap>(API_URL, data).then(response => response.data);
 },
 
-  // update(session) — Actualiza una sesión existente.
-  update(session: GrantTrap): Promise<GrantTrap> {
-    // PUT /sessions/42 con los datos actualizados en el body
-        return http.patch<GrantTrap>((API_URL + "/" + session.id),session).then(response => response.data)
-  },
+// update(id, data) — Actualiza un proyecto existente.
+update(id: number, data: any): Promise<GrantTrap> {
+  return http.patch<GrantTrap>(`${API_URL}/${id}`, data).then(response => response.data);
+},
 };
 
 // Alias para compatibilidad con otros archivos

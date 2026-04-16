@@ -7,7 +7,7 @@ interface ButtonProps {
   style?: 'verde' | 'rojo' | 'gris'; 
 }
 
-export default function Button ({ text, onClick, style = 'verde' }: ButtonProps) {  
+function Button ({ text, onClick, style = 'verde' }: ButtonProps) {  
   return (
     <button 
       className={`custom-btn btn-${style}`} 
@@ -17,3 +17,4 @@ export default function Button ({ text, onClick, style = 'verde' }: ButtonProps)
     </button>
   );
 };
+export default Button;

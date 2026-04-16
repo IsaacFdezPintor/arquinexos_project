@@ -26,11 +26,11 @@ export default function HomePage() {
         <div className="hero__actions">
           {/* Mostrar botón de "Ver mis proyectos" si el usuario está autenticado, de lo contrario mostrar opciones de registro e inicio de sesión */}
           {user ? (
-            <Button texto="Ver mis proyectos" onClick={() => navigate("/proyects")} estilo="verde"/>
+            <Button text="Ver mis proyectos" onClick={() => navigate("/projects")} style="verde"/>
           ) : (
             <>
-              <Button texto="Crear cuenta gratis" onClick={() => navigate("/register")} estilo="verde" />
-              <Button texto="Iniciar sesión" onClick={() => navigate("/login")} estilo="gris" />
+              <Button text="Crear cuenta gratis" onClick={() => navigate("/register")} style="verde" />
+              <Button text="Iniciar sesión" onClick={() => navigate("/login")} style="gris" />
             </>
           )}
         </div>

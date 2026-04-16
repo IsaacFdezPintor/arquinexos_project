@@ -7,7 +7,7 @@ type ConfirmDeleteProps = {
   onCancel: () => void;      
 };
 
-export default function ConfirmDelete({
+function ConfirmDelete({
   title,
   onConfirm,
   onCancel,
@@ -29,3 +29,5 @@ export default function ConfirmDelete({
     </div>
   );
 }
+
+export default ConfirmDelete;

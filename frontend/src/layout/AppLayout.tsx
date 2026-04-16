@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/authContext";
 import Button from "../components/Button/Button";
 import { useEffect } from "react";
-import { User, LogOut, Home, Lock, Briefcase, BarChart3, Users } from "lucide-react";
+import {  LogOut, Home, Lock, Briefcase, Users } from "lucide-react";
 
 export default function AppLayout() {
   const { isAuthenticated, user, logout } = useAuth();
