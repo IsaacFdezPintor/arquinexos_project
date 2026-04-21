@@ -1,39 +1,52 @@
-/* Contenedor principal que bloquea toda la pantalla */
-.spinner {
-  position: fixed; /* Se queda fijo aunque hagas scroll */
-  top: 0;
-  left: 0;
-  width: 100vw; /* 100% del ancho de la pantalla */
-  height: 100vh; /* 100% del alto de la pantalla */
+/* Contenedor principal */
+.loader {
   display: flex;
-  flex-direction: column; /* Pone el mensaje debajo del círculo */
-  justify-content: center; /* Centra verticalmente */
-  align-items: center; /* Centra horizontalmente */
-  z-index: 9999; /* Asegura que esté por encima de TODO */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px; /* Ajusta según necesites */
+  width: 100%;
 }
 
-/* El círculo que gira */
-.loader {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #f3f3f3; /* Gris claro */
-  border-top: 6px solid #1a73e8; /* Azul */
+/* El Spinner (creado con el pseudo-elemento ::before) */
+.loader::before {
+  content: "";
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3; /* Color del fondo del círculo */
+  border-top: 5px solid #3498db; /* Color de la parte que gira */
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 15px; /* Espacio entre el spinner y el texto */
+  margin-bottom: 15px;
 }
 
-/* Estilo para el mensaje de "Cargando..." */
+/* Estilo del mensaje */
 .spinner-message {
-  font-family: sans-serif;
-  color: #333;
-  font-size: 1.1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #555;
+  font-size: 1rem;
   font-weight: 500;
   margin: 0;
+  /* Animación sutil de parpadeo para el texto */
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 /* Animación de rotación */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animación de pulsación para el texto */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }

@@ -12,7 +12,7 @@ export default function NotFoundPage() {
         La página que buscas no existe o ha sido movida.
       </p>
       <Link to="/">
-        <Button texto="Volver al inicio" onClick={() => {}} estilo="verde" />
+        <Button text="Volver al inicio" onClick={() => {}} style="verde" />
       </Link>
     </div>
   );

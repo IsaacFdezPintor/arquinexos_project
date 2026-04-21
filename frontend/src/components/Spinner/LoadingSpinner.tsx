@@ -6,8 +6,7 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner = ({ message = "Cargando sesiones..." }: LoadingSpinnerProps) => {
   return (
-    <div className="spinner">
-      <div className="loader"></div>
+      <div className="loader">
       <p className="spinner-message">{message}</p>
     </div>
   );

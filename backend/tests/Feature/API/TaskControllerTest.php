@@ -164,10 +164,23 @@ class TaskControllerTest extends TestCase
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 
-    public function test_worker_cannot_delete_task(): void
+    public function test_worker_can_delete_own_task(): void
     {
         $worker = $this->workerUser();
-        $task = Task::factory()->create();
+        $task = Task::factory()->create(['assigned_user_id' => $worker->id]);
+
+        $response = $this->actingAs($worker, 'sanctum')
+            ->deleteJson("/api/tasks/{$task->id}");
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+    }
+
+    public function test_worker_cannot_delete_other_worker_task(): void
+    {
+        $worker = $this->workerUser();
+        $otherWorker = $this->workerUser();
+        $task = Task::factory()->create(['assigned_user_id' => $otherWorker->id]);
 
         $response = $this->actingAs($worker, 'sanctum')
             ->deleteJson("/api/tasks/{$task->id}");

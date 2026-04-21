@@ -1,13 +1,14 @@
-import type { GrantTrap } from "../../types/Project";
+import type { Project } from "../../types/Project";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import "./ProjectList.css";
 
 type ProjectListProps = {
-  projects: GrantTrap[];
+  projects: Project[];
   loading: boolean;
   deletingId: number | null;
-  onDelete: (project: GrantTrap) => void;
-  onEdit: (project: GrantTrap) => void;
+  onDelete: (project: Project) => void;
+  onEdit: (project: Project) => void;
+  canManage?: boolean;
 };
 
 function ProjectList({
@@ -16,6 +17,7 @@ function ProjectList({
   deletingId,
   onDelete,
   onEdit,
+  canManage = false,
 }: ProjectListProps) {
   if (loading) {
     return (
@@ -42,6 +44,7 @@ function ProjectList({
           onDelete={onDelete}
           onEdit={onEdit}
           deleting={deletingId === p.id}
+          canManage={canManage}
         />
       ))}
     </div>

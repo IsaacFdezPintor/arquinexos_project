@@ -5,12 +5,12 @@ import ProtectedRoute from "./routing/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProyectsPage from "./pages/ProjectsPage";
+import ProjectsPage from "./pages/ProjectsPage";
 import SessionDetailPage from "./pages/ProjectDetailPage";
 import ProjectFormPage from "./pages/ProjectFormPage";
-import TaskCreatePage from "./pages/TaskCreatePage";
-import TaskEditPage from "./pages/TaskEditPage";
-import ProfilePage from "./pages/ProfilePage";
+import TaskFormPage from "./pages/TaskFormPage";
+import TaskPage from "./pages/TaskPage";
+import TeamPage from "./pages/TeamPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
@@ -19,21 +19,21 @@ export default function App() {
       <Route element={<AppLayout />}>
 
         {/* ---- RUTAS PÚBLICAS ---- */}
-        <Route path="/" element={<HomePage />} /> {/* TODO Asignación de Pagina de Inicio */}
+        <Route path="/" element={<HomePage />} /> 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
         {/* ---- RUTAS PROTEGIDAS ---- */}
-        <Route path="/projects" element={<ProtectedRoute> <ProyectsPage />  </ProtectedRoute>} />
-        <Route path="/projects/new" element={ <ProtectedRoute> <ProjectFormPage /> </ProtectedRoute>} />
+        <Route path="/projects" element={<ProtectedRoute> <ProjectsPage />  </ProtectedRoute>} />
+        <Route path="/tasks" element={<ProtectedRoute> <TaskPage /> </ProtectedRoute>} />
+        <Route path="/projects/new" element={ <ProtectedRoute > <ProjectFormPage /> </ProtectedRoute>} />
         <Route path="/projects/:id" element={ <ProtectedRoute> <SessionDetailPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/edit" element={<ProtectedRoute> <ProjectFormPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/tasks/new" element={<ProtectedRoute> <TaskCreatePage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/tasks/:taskId/edit" element={<ProtectedRoute> <TaskEditPage /> </ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/edit" element={<ProtectedRoute > <ProjectFormPage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/tasks/new" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
+        <Route path="/projects/:id/tasks/:taskId/edit" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
+        <Route path="/equipo" element={<ProtectedRoute> <TeamPage /> </ProtectedRoute>} />
 
         {/* ---- RUTA 404 ---- */}
-        {/* "*" captura cualquier URL que no coincida con las anteriores */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

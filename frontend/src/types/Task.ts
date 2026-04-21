@@ -1,4 +1,3 @@
-export type TaskStatus = "pendiente" | "en_progreso" | "completada" | "cancelada";
 export type TaskPriority = "baja" | "media" | "alta" | "urgente";
 
 export interface Task {
@@ -7,11 +6,8 @@ export interface Task {
   assigned_user_id?: number;
   name: string;
   description?: string;
-  status: TaskStatus;
-  priority?: TaskPriority;
-  assigned_user_email?: string;
+  priority: TaskPriority;
   assigned_user_name?: string;
-  estimated_hours?: number;
   start_date: string;
   end_date?: string;
   created_at?: string;

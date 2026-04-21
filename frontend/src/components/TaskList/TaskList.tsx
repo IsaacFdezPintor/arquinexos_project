@@ -1,58 +1,58 @@
 import { useEffect, useState } from "react";
 import type { Task } from "../../types/Task";
 import { taskService } from "../../services/taskService";
-import { CheckCircle, AlertCircle, Clock, Trash2, Edit2, Loader, User, Calendar, Inbox } from "lucide-react";
+import { CheckCircle2, Edit2, Loader, User, Calendar, Inbox, AlertCircle,MessageSquare } from "lucide-react";
 import "./TaskList.css";
 
 type TaskListProps = {
-  projectId: number;
+  projectId?: number;
+  userId?: number;
   onTaskDeleted?: () => void;
   onTaskEdit?: (taskId: number) => void;
+  canManage?: boolean;
 };
 
-const STATUS_ICONS: Record<string, React.ReactNode> = {
-  "pendiente": <Clock size={16} />,
-  "en_progreso": <Loader size={16} style={{ animation: "spin 1s linear infinite" }} />,
-  "completada": <CheckCircle size={16} />,
-  "cancelada": <AlertCircle size={16} />,
-};
 
-const STATUS_COLORS: Record<string, string> = {
-  "pendiente": "var(--color-warning)",
-  "en_progreso": "var(--color-primary)",
-  "completada": "var(--color-success)",
-  "cancelada": "var(--color-error)",
-};
 
-export default function TaskList({ projectId, onTaskDeleted, onTaskEdit }: TaskListProps) {
+export default function TaskList({ projectId, userId, onTaskDeleted, onTaskEdit, canManage = false }: TaskListProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadTasks();
-  }, [projectId]);
+  }, [projectId, userId]);
 
   const loadTasks = async () => {
     setLoading(true);
+    setErrorMessage(null);
     try {
-      const data = await taskService.getByProject(projectId);
-      setTasks(data);
-    } catch (error) {
-      console.error("❌ Error al cargar tareas:", error);
+      const data = projectId
+        ? await taskService.getByProject(projectId)
+        : await taskService.getAll();
+
+      const filtered = userId
+        ? data.filter((task) => Number(task.assigned_user_id) === Number(userId))
+        : data;
+
+      setTasks(filtered);
+    } catch {
+      setErrorMessage("No se pudieron cargar las tareas. Intentalo de nuevo.");
       setTasks([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (taskId: number | undefined) => {
+  const handleComplete = async (taskId: number | undefined) => {
     if (!taskId) return;
+    setErrorMessage(null);
     try {
       await taskService.delete(taskId);
       setTasks(tasks.filter(t => t.id !== taskId));
       onTaskDeleted?.();
-    } catch (error) {
-      console.error("❌ Error al eliminar tarea:", error);
+    } catch {
+      setErrorMessage("No se pudo completar la tarea.");
     }
   };
 
@@ -68,26 +68,38 @@ export default function TaskList({ projectId, onTaskDeleted, onTaskEdit }: TaskL
   if (tasks.length === 0) {
     return (
       <div className="task-list task-list--empty">
-        <p><Inbox size={20} style={{ display: "inline" }} /> No hay tareas en este proyecto</p>
+        <div className="empty-state-container">
+          <Inbox size={40} className="empty-state-icon" />
+          <h3>No hay tareas disponibles</h3>
+          <p>
+            {projectId 
+              ? "Este proyecto aún no tiene tareas asignadas." 
+              : "Actualmente no tienes tareas pendientes en tu lista." } (${tasks.length})
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="task-list">
+      {errorMessage && (
+        <div className="task-list task-list--error">
+          <p><AlertCircle size={18} style={{ display: "inline", marginRight: "0.35rem" }} /> {errorMessage}</p>
+        </div>
+      )}
+
       {tasks.map((task) => (
         <div key={task.id} className="task-item">
-          <div className="task-item__status">
-            <span style={{ color: STATUS_COLORS[task.status] }}>
-              {STATUS_ICONS[task.status]}
-            </span>
-          </div>
           
           <div className="task-item__content">
             <h4 className="task-item__name">{task.name}</h4>
             <div className="task-item__meta">
               {task.assigned_user_name && (
                 <span className="task-item__assigned"><User size={14} style={{ display: "inline", marginRight: "0.25rem" }} /> {task.assigned_user_name}</span>
+              )}
+              {task.description && (
+                <span className="task-item__description"><MessageSquare size={14} style={{ display: "inline", marginRight: "0.25rem" }} />{task.description}</span>
               )}
               {task.start_date && (
                 <span className="task-item__date"><Calendar size={14} style={{ display: "inline", marginRight: "0.25rem" }} /> {new Date(task.start_date).toLocaleDateString("es-ES")}</span>
@@ -96,19 +108,21 @@ export default function TaskList({ projectId, onTaskDeleted, onTaskEdit }: TaskL
           </div>
 
           <div className="task-item__actions">
-            <button 
-              className="task-item__action-btn"
-              onClick={() => onTaskEdit?.(task.id!)}
-              title="Editar"
+            {canManage && (
+              <button
+                className="task-item__action-btn"
+                onClick={() => onTaskEdit?.(task.id!)}
+                title="Editar"
+              >
+                <Edit2 size={16} />
+              </button>
+            )}
+            <button
+              className="task-item__action-btn task-item__action-btn--complete"
+              onClick={() => handleComplete(task.id)}
+              title="Completar tarea"
             >
-              <Edit2 size={16} />
-            </button>
-            <button 
-              className="task-item__action-btn task-item__action-btn--danger"
-              onClick={() => handleDelete(task.id)}
-              title="Eliminar"
-            >
-              <Trash2 size={16} />
+              <CheckCircle2 size={16} />
             </button>
           </div>
         </div>

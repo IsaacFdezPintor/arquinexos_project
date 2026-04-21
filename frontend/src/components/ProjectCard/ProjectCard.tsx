@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import type { GrantTrap } from "../../types/Project";
+import type { Project } from "../../types/Project";
 import StatusBadge from "../StatusBadge/StatusBadge";
 import Button from "../Button/Button";
 import { User, Folder, Calendar, MapPin, Eye, Edit2, Trash2 } from "lucide-react";
 
 type ProjectCardProps = {
-  project: GrantTrap;
-  onDelete: (project: GrantTrap) => void;
-  onEdit: (project: GrantTrap) => void;
+  project: Project;
+  onDelete: (project: Project) => void;
+  onEdit: (project: Project) => void;
   deleting?: boolean;
+  canManage?: boolean;
 };
 
 // Formatear fecha 
@@ -29,7 +30,7 @@ function formatPrice(price: number): string {
   return price.toLocaleString("es-ES", { style: "currency", currency: "EUR" });
 }
 
-function ProjectCard({ project, onDelete, onEdit, }: ProjectCardProps) {
+function ProjectCard({ project, onDelete, onEdit, canManage = false }: ProjectCardProps) {
   
   const navigate = useNavigate();
 
@@ -55,8 +56,12 @@ function ProjectCard({ project, onDelete, onEdit, }: ProjectCardProps) {
           <span className="scard-price"> {formatPrice(project.budget || 0)}</span>
           <div className="scard-actions">
             <Button text={<><Eye size={14} /> Ver</>} onClick={() => navigate(`/projects/${project.id}`)} style="verde" />
-            <Button text={<><Edit2 size={14} /> Editar</>} onClick={() => onEdit(project)} style="gris" />
-            <Button text={<><Trash2 size={14} /> Eliminar</>} onClick={() => onDelete(project)} style="rojo"/>
+            {canManage && (
+              <>
+                <Button text={<><Edit2 size={14} /> Editar</>} onClick={() => onEdit(project)} style="gris" />
+                <Button text={<><Trash2 size={14} /> Eliminar</>} onClick={() => onDelete(project)} style="rojo"/>
+              </>
+            )}
           </div>
         </div>
       </div>

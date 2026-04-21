@@ -116,6 +116,12 @@
   color: var(--color-error);
 }
 
+.task-item__action-btn--complete:hover {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: #16a34a;
+  color: #166534;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);

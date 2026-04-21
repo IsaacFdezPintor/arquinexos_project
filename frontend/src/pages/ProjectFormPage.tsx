@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { useNavigate ,useLocation } from "react-router-dom";
+import { Navigate, useNavigate ,useLocation } from "react-router-dom";
 import { ProjectService } from "../services/projectService.ts";
 import SessionForm from "../components/ProjectForm/ProjectForm.tsx";
 import { ToastContainer } from "../components/Toast/Toast.tsx";
 import { useToast } from "../components/Toast/useToast.tsx";
+import { useAuth } from "../auth/authContext.tsx";
 
 
 function ProjectFormPage() {
+  const { user , isJefe } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { toasts, addToast, removeToast } = useToast();
   const selectedProject = location.state?.project || null;
+
+  if (user && !isJefe) {
+    return <Navigate to="/projects" replace />;
+  }
 
   const handleSubmit = async (data: any) => {
     setLoading(true);

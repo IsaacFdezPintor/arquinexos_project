@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import type { GrantTrap, ProjectStatus } from "../../types/Project";
+import type { Project, ProjectStatus } from "../../types/Project";
 import Button from "../Button/Button";
 import { FileText, User, Calendar, MapPin, DollarSign, CheckCircle, MessageSquare, Zap, Link, ArrowLeft } from "lucide-react";
 import "./ProjectForm.css";
 
 type ProjectFormProps = {
   addProject: (data: any ) => void;
-  updateProject: (project: GrantTrap) => void;
+  updateProject: (project: Project) => void;
   cancelUpdateProject: () => void;
   peticionEnProgreso: boolean;
-  selectedProject: GrantTrap | null;
+  selectedProject: Project | null;
 };
 
 
@@ -36,7 +36,7 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
     e.preventDefault();
     if (name.trim().length > 0 && clientName.trim().length > 0) {
       if (selectedProject != null) {
-        const newProyecto: GrantTrap = {
+        const newProyecto: Project = {
           ...selectedProject,
           name,
           type,
@@ -189,7 +189,7 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
         </div>
 
         <div className="form-actions">
-          <button type="submit"> {selectedProject ? "Actualizar Proyecto" : "Crear Proyecto"}</button>
+          <button type="submit" className="custom-btn btn-verde"> {selectedProject ? "Actualizar Proyecto" : "Crear Proyecto"}</button>
           <Button
             text="Cancelar"
             onClick={cancelUpdateProject}

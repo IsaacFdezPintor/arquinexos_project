@@ -2,12 +2,12 @@
 // StatusBadge.tsx — Insignia de estado con color
 // =============================================
 
-import type { SessionStatus } from "../../types/Project";
+import type { ProjectStatus } from "../../types/Project";
 import { Clock, CheckCircle, CheckCircle2, XCircle } from "lucide-react";
 import './StatusBadge.css';
 
 // Configuración de cada estado: texto, clase CSS e icono
-const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string; Icon: React.ReactNode }> = {
+const STATUS_CONFIG: Record<ProjectStatus, { label: string; className: string; Icon: React.ReactNode }> = {
   pendiente:   { label: "Pendiente",   className: "badge--pending",   Icon: <Clock size={12} /> },
   confirmada:  { label: "Confirmada",  className: "badge--confirmed", Icon: <CheckCircle size={12} /> },
   completada:  { label: "Completada",  className: "badge--completed", Icon: <CheckCircle2 size={12} /> },
@@ -16,7 +16,7 @@ const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string; I
 
 // Props del componente
 type StatusBadgeProps = {
-  status: SessionStatus;
+  status: ProjectStatus;
 };
 
 export default function StatusBadge({status}: StatusBadgeProps) {

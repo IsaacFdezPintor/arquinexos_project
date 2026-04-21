@@ -11,7 +11,6 @@ const authService = AuthService;
 export default function RegisterPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,9 +36,9 @@ export default function RegisterPage() {
     try {
       const res = await authService.register(email, password, name, role);
       login({ token: res.token, user: res.user });
-      navigate("/sessions");
+      navigate("/projects");
     } catch (err) {
-      if (isAxiosError(err) && err.response?.status === 409) {
+      if (isAxiosError(err) && err.response?.status === 422) {
         setError("Ya existe una cuenta con ese email");
       } else {
         setError("Error de conexión. Inténtalo más tarde.");
@@ -60,7 +59,7 @@ export default function RegisterPage() {
       >
         <div className="auth-form__header">
           <h2> Crear cuenta</h2>
-          <p >Únete a StudioSnap y gestiona tus sesiones</p>
+          <p >Únete a GrantTrap y gestiona tus proyectos </p>
         </div>
 
         {error && (
@@ -69,70 +68,71 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {/* Input Nombre */}
-        <div className="auth-form__group">
-          <label htmlFor="name" className="auth-form__label">
-            <User size={16} /> Nombre
-          </label>
-          <input
-            id="name"
-            type="text"
-            className="auth-form__input"
-            placeholder="Tu nombre completo"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+        <fieldset className="auth-form__fieldset">
+          <legend>Datos de registro</legend>
+          <p className="auth-form__help">Completa el formulario para crear una cuenta.</p>
 
-        {/* Input Email */}
-        <div className="auth-form__group">
-          <label htmlFor="email" className="auth-form__label">
-            <Mail size={16} /> Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="auth-form__input"
-            placeholder="tu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          <div className="auth-form__group">
+            <label htmlFor="name" className="auth-form__label">
+              <User size={16} /> Nombre
+            </label>
+            <input
+              id="name"
+              type="text"
+              className="auth-form__input"
+              placeholder="Tu nombre completo"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* Selector de Rol */}
-        <div className="auth-form__group">
-          <label htmlFor="role" className="auth-form__label">
-            <Shield size={16} /> Rol
-          </label>
-          <select
-            id="role"
-            className="auth-form__select"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            required
-          >
-            <option value="trabajador">Trabajador</option>
-            <option value="jefe">Jefe</option>
-          </select>
-        </div>
+          <div className="auth-form__group">
+            <label htmlFor="email" className="auth-form__label">
+              <Mail size={16} /> Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="auth-form__input"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* Input Contraseña */}
-        <div className="auth-form__group">
-          <label htmlFor="password" className="auth-form__label">
-            <Lock size={16} /> Contraseña
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="auth-form__input"
-            placeholder="Mínimo 8 caracteres"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="auth-form__group">
+            <label htmlFor="role" className="auth-form__label">
+              <Shield size={16} /> Rol
+            </label>
+            <select
+              id="role"
+              className="auth-form__select"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+            >
+              <option value="trabajador">Trabajador</option>
+              <option value="jefe">Jefe</option>
+            </select>
+          </div>
+
+          <div className="auth-form__group">
+            <label htmlFor="password" className="auth-form__label">
+              <Lock size={16} /> Contraseña
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="auth-form__input"
+              placeholder="Mínimo 8 caracteres"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+        </fieldset>
 
         
 
@@ -141,10 +141,9 @@ export default function RegisterPage() {
 
         {/* Botón Submit */}
         <Button
-          texto={loading ? "Creando..." : "Crear cuenta"}
+          text={loading ? "Creando..." : "Crear cuenta"}
           onClick={handleSubmit}
-          estilo="verde"
-          deshabilitar={loading}
+          style="verde"
         />
 
         <p className="auth-form__footer">

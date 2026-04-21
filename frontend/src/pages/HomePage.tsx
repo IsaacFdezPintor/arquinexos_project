@@ -11,19 +11,18 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="home-page">
-      <section className="hero">
-        <div className="hero__badge">Organizador de tareas</div>
-        <h1 className="hero__title">
+    <div className="home">
+        <div className="home__badge">Organizador de tareas</div>
+        <h1 className="home__title">
           Planifica tus proyectos con un{" "}
-          <span className="hero__highlight">organizador de tareas</span>
+          <span className="home__highlight">organizador de tareas</span>
         </h1>
-        <p className="hero__subtitle">
+        <p className="home__subtitle">
           Visualiza, organiza y haz seguimiento de todas tus tareas. Plazos, dependencias y estado en un
           solo lugar.
         </p>
 
-        <div className="hero__actions">
+        <div className="home__actions">
           {/* Mostrar botón de "Ver mis proyectos" si el usuario está autenticado, de lo contrario mostrar opciones de registro e inicio de sesión */}
           {user ? (
             <Button text="Ver mis proyectos" onClick={() => navigate("/projects")} style="verde"/>
@@ -34,7 +33,6 @@ export default function HomePage() {
             </>
           )}
         </div>
-      </section>
 
   
   

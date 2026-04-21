@@ -1,15 +1,16 @@
-export type User = {
-  id: number;     
-  email: string; 
-  name: string; 
-  role: "TRABAJADOR" | "JEFE";  
-};
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: "trabajador" | "jefe";
+  created_at?: string; 
+  updated_at?: string;
+}
 
-export type AuthSession = {
-  token: string;  
-  user: User;     
-};
+export interface AuthSession {
+  token: string;
+  user: User;
+}
 
-// «AuthResponse» es lo que devuelve la API cuando
-// llamas a /auth/login o /auth/register.
+// Usamos un alias para AuthResponse para mayor claridad semántica
 export type AuthResponse = AuthSession;

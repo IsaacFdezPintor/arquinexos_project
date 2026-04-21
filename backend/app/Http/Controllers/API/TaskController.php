@@ -26,6 +26,10 @@ class TaskController extends Controller
     {
         $query = Task::with(['assignedUser', 'project']);
 
+        if ($request->user()->isWorker()) {
+            $query->where('assigned_user_id', $request->user()->id);
+        }
+
         if ($request->query('no_paginate')) {
             return response()->json($query->get(), 200);
         }
@@ -81,7 +85,7 @@ class TaskController extends Controller
             'project_id' => ['required', 'exists:projects,id'],
             'assigned_user_id' => ['nullable', 'exists:users,id'],
             'name' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string'],
+            'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
@@ -130,8 +134,12 @@ class TaskController extends Controller
      * @param Task $task Tarea solicitada
      * @return \Illuminate\Http\JsonResponse Información de la tarea
      */
-    public function show(Task $task)
+    public function show(Request $request, Task $task)
     {
+        if ($request->user()->isWorker() && $task->assigned_user_id !== $request->user()->id) {
+            return response()->json(['error' => 'Acceso denegado'], 403);
+        }
+
         return response()->json(
             $task->load(['project', 'assignedUser']),
             200
@@ -168,7 +176,7 @@ class TaskController extends Controller
             'project_id' => ['required', 'exists:projects,id'],
             'assigned_user_id' => ['nullable', 'exists:users,id'],
             'name' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string'],
+            'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
@@ -220,8 +228,11 @@ class TaskController extends Controller
      */
     public function destroy(Request $request, Task $task)
     {
-        // Verificar que el usuario tenga permisos de jefe
-        if (!$request->user()->isJefe()) {
+        $user = $request->user();
+
+        // El jefe puede completar cualquier tarea.
+        // El trabajador solo puede completar tareas asignadas a él.
+        if (!$user->isJefe() && $task->assigned_user_id !== $user->id) {
             return response()->json(['error' => 'Acceso denegado'], 403);
         }
 
@@ -237,10 +248,13 @@ class TaskController extends Controller
      * @param int $projectId ID del proyecto
      * @return \Illuminate\Http\JsonResponse Tareas del proyecto
      */
-    public function getByProject($projectId)
+    public function getByProject(Request $request, $projectId)
     {
         $tasks = Task::where('project_id', $projectId)
             ->with(['assignedUser', 'project'])
+            ->when($request->user()->isWorker(), function ($query) use ($request) {
+                $query->where('assigned_user_id', $request->user()->id);
+            })
             ->get();
 
         return response()->json($tasks, 200);

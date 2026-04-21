@@ -1,6 +1,6 @@
 export type ProjectStatus = "pendiente" | "confirmada" | "completada" | "cancelada";
 
-export type GrantTrap = {
+export type Project = {
   id: number;
   name: string;              // Nombre del proyecto
   type: string;              // Tipo de proyecto
@@ -11,8 +11,6 @@ export type GrantTrap = {
   start_date: string;        // Fecha de inicio
   end_date?: string;         // Fecha de fin
   address?: string;          // Dirección
-  latitude?: number;         // Latitud
-  longitude?: number;        // Longitud
   created_at?: string;
   updated_at?: string;
 };

@@ -2,10 +2,10 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/authContext";
 import Button from "../components/Button/Button";
 import { useEffect } from "react";
-import {  LogOut, Home, Lock, Briefcase, Users } from "lucide-react";
+import { LogOut, Home, Lock, Briefcase, Users , ClipboardList} from "lucide-react";
 
 export default function AppLayout() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isJefe } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -26,11 +26,8 @@ export default function AppLayout() {
           </NavLink>
 
           <nav className="navbar__links">
-            <NavLink to="/" end className="navbar__link">
-              <Home size={16} />
-              Inicio
-            </NavLink>
-
+         
+            {/* 2. Proyectos: Aparece siempre que esté autenticado */}
             {isAuthenticated && (
               <NavLink to="/projects" className="navbar__link">
                 <Briefcase size={16} />
@@ -38,7 +35,16 @@ export default function AppLayout() {
               </NavLink>
             )}
 
+            {/* 3. Tareas: Aparece siempre que esté autenticado */}
             {isAuthenticated && (
+              <NavLink to="/tasks" className="navbar__link">
+                <ClipboardList size={16} />
+                Tareas
+              </NavLink>
+            )}
+
+            {/* 4. Equipo: Solo si es Jefe */}
+            {isAuthenticated && isJefe && (
               <NavLink to="/equipo" className="navbar__link">
                 <Users size={16} />
                 Equipo
@@ -49,12 +55,12 @@ export default function AppLayout() {
           <div className="navbar__actions">
             {isAuthenticated ? (
               <>
-                <NavLink to="/profile" className="navbar__link navbar__link--user">
-                  <div className="user-profile">
-                    <div className="user-avatar">{user?.name?.charAt(0).toUpperCase() || "U"}</div>
-                    <span className="user-name">{user?.name}</span>
+                <div className="user-profile">
+                  <div className="user-avatar">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
                   </div>
-                </NavLink>
+                  <span className="user-name">{user?.name}</span>
+                </div>
                 <Button 
                   text={<><LogOut size={14} /> Salir</>} 
                   onClick={handleLogout} 

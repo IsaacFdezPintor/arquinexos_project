@@ -1,4 +1,4 @@
-import type { GrantTrap } from "../types/Project";
+import type { Project } from "../types/Project";
 import { http } from "./http";
 
 // Leemos la URL base de la API desde las variables de entorno (.env)
@@ -16,15 +16,13 @@ const API_URL = API_BASE_URL + "/projects";
 export const ProjectService = {
 
    // get(id) — Obtiene UNA sesión por su ID.
-get(id: number): Promise<GrantTrap> {
-  return http.get<GrantTrap>(API_URL + "/" + id).then(response => response.data);
+get(id: number): Promise<Project> {
+  return http.get<Project>(API_URL + "/" + id).then(response => response.data);
 },
 
   // getAll() — Obtiene TODAS las sesiones del usuario autenticado.
-  getAll(): Promise<GrantTrap[]> {
+  getAll(): Promise<Project[]> {
         return http.get(API_URL).then(response => {
-          // Laravel devuelve datos paginados con estructura { data: [...] }
-          // Extraemos el array de proyectos del objeto paginado
           const projects = Array.isArray(response.data) ? response.data : response.data.data;
           return projects || [];
         });
@@ -36,15 +34,12 @@ get(id: number): Promise<GrantTrap> {
   },
 
 // create(data) — Crea una nueva sesión fotográfica.
-create(data: { title: string; completed?: boolean }): Promise<GrantTrap> {
-  return http.post<GrantTrap>(API_URL, data).then(response => response.data);
+create(data: { title: string; completed?: boolean }): Promise<Project> {
+  return http.post<Project>(API_URL, data).then(response => response.data);
 },
 
 // update(id, data) — Actualiza un proyecto existente.
-update(id: number, data: any): Promise<GrantTrap> {
-  return http.patch<GrantTrap>(`${API_URL}/${id}`, data).then(response => response.data);
+update(id: number, data: any): Promise<Project> {
+  return http.patch<Project>(`${API_URL}/${id}`, data).then(response => response.data);
 },
 };
-
-// Alias para compatibilidad con otros archivos
-export const sessionService = ProjectService;

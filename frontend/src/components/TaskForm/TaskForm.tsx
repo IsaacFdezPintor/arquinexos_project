@@ -1,53 +1,52 @@
 import { useState, useEffect } from "react";
-import type { Task, TaskStatus } from "../../types/Task";
-import type { User } from "../../types/User";
+import type { Task, TaskPriority } from "../../types/Task";
+import type { User } from "../../types/Auth";
 import Button from "../Button/Button";
 import { userService } from "../../services/userService";
-import { FileText, CheckCircle, Calendar, User as UserIcon } from "lucide-react";
+import { FileText, CheckCircle, Calendar,MessageSquare, User as UserIcon } from "lucide-react";
 import "./TaskForm.css";
 
 type TaskFormProps = {
   addTask: (data: Task) => void;
   updateTask: (task: Task) => void;
   cancelUpdateTask: () => void;
-  peticionEnProgreso: boolean;
   taskSeleccionada: Task | null;
   projectId?: number;
 };
 
-const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
-  { value: "pendiente", label: "Pendiente" },
-  { value: "en_progreso", label: "En Progreso" },
-  { value: "completada", label: "Completada" },
-  { value: "cancelada", label: "Cancelada" },
-];
+const PRIORITY_OPTIONS: { value: TaskPriority; label: string }[] = [
+  { value: "baja", label: "Pendiente" },
+  { value: "media", label: "En Progreso" },
+  { value: "alta", label: "Completada" },
+  { value: "urgente", label: "Urgente" },];
 
 export default function TaskForm({
   addTask,
-  peticionEnProgreso,
   taskSeleccionada,
   updateTask,
   cancelUpdateTask,
   projectId,
 }: TaskFormProps) {
   const [name, setName] = useState(taskSeleccionada?.name ?? "");
-  const [status, setStatus] = useState<TaskStatus>(taskSeleccionada?.status ?? "pendiente");
+  const [priority, setPriority] = useState<TaskPriority>(taskSeleccionada?.priority ?? "baja");
   const [startDate, setStartDate] = useState(taskSeleccionada?.start_date ?? "");
   const [endDate, setEndDate] = useState(taskSeleccionada?.end_date ?? "");
   const [assignedUserId, setAssignedUserId] = useState(taskSeleccionada?.assigned_user_id?.toString() ?? "");
   const [assignedUserName, setAssignedUserName] = useState(taskSeleccionada?.assigned_user_name ?? "");
   const [users, setUsers] = useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
+  const [usersError, setUsersError] = useState<string | null>(null);
+  const [description, setDescription] = useState(taskSeleccionada?.description ?? "");
 
   // Cargar lista de usuarios al montar el componente
   useEffect(() => {
+    setUsersError(null);
     userService.getAll()
       .then(data => {
-        console.log("✅ Usuarios cargados:", data);
         setUsers(data);
       })
-      .catch(err => {
-        console.error("❌ Error al cargar usuarios:", err);
+      .catch(() => {
+        setUsersError("No se pudieron cargar los usuarios.");
         setUsers([]);
       })
       .finally(() => setLoadingUsers(false));
@@ -66,30 +65,32 @@ export default function TaskForm({
 
   function handleSubmit() {
     if (name.trim().length > 0 && projectId && startDate) {
+
       if (taskSeleccionada != null) {
         const tarea: Task = {
           ...taskSeleccionada,
           name,
-          status,
+          priority,
           start_date: startDate,
           end_date: endDate,
           assigned_user_id: assignedUserId ? Number(assignedUserId) : undefined,
           assigned_user_name: assignedUserName,
+          description: description || undefined,
         };
         updateTask(tarea);
       } else {
         const tarea: Task = {
           project_id: projectId,
           name: name.trim(),
-          status,
+          priority,
           start_date: startDate,
           end_date: endDate,
           assigned_user_id: assignedUserId ? Number(assignedUserId) : undefined,
           assigned_user_name: assignedUserName,
+          description: description || undefined,
         };
         addTask(tarea);
-        setName("");
-      }
+            }
     }
   }
 
@@ -101,7 +102,11 @@ export default function TaskForm({
         handleSubmit();
       }}
     >
-      <div className="form-grid">
+      <fieldset className="form-fieldset">
+        <legend>Datos principales de la tarea</legend>
+        <p className="form-help">Rellena los datos obligatorios para crear o editar la tarea.</p>
+
+        <div className="form-grid">
         {/* Nombre de la Tarea */}
         <div className="form-group">
           <label className="form-label">
@@ -121,15 +126,15 @@ export default function TaskForm({
         {/* Estado */}
         <div className="form-group">
           <label className="form-label">
-            <CheckCircle size={16} /> Estado
+            <CheckCircle size={16} /> Prioridad
           </label>
           <select 
-            value={status} 
-            onChange={(e) => setStatus(e.target.value as TaskStatus)} 
+            value={priority} 
+            onChange={(e) => setPriority(e.target.value as TaskPriority)} 
             className="form-select" 
             required
           >
-            {STATUS_OPTIONS.map((s) => (
+            {PRIORITY_OPTIONS.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
           </select>
@@ -184,27 +189,46 @@ export default function TaskForm({
               </option>
             ))}
           </select>
-          {users.length === 0 && !loadingUsers && (
+          {usersError && !loadingUsers && (
             <small style={{ color: "var(--color-error)", marginTop: "0.25rem", display: "block" }}>
-              ⚠️ No se encontraron usuarios. Verifica que el servidor esté funcionando.
+              {usersError}
+            </small>
+          )}
+          {!usersError && users.length === 0 && !loadingUsers && (
+            <small style={{ color: "var(--color-error)", marginTop: "0.25rem", display: "block" }}>
+              No se encontraron usuarios. Verifica que el servidor esté funcionando.
             </small>
           )}
         </div>
-      </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="form-fieldset">
+        <legend>Descripcion y notas</legend>
+        <div className="form-group form-group--full">
+          <label className="form-label"> <MessageSquare size={16} /> Descripción
+          </label>
+          <textarea
+            rows={4}
+            placeholder="Detalles adicionales sobre el proyecto..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="form-textarea"
+          />
+        </div>
+      </fieldset>
 
       <div className="form-actions">
         <Button
-          texto={taskSeleccionada ? "Guardar cambios" : "Crear tarea"}
+          text={taskSeleccionada ? "Guardar cambios" : "Crear tarea"}
           onClick={handleSubmit}
-          estilo="verde"
-          deshabilitar={peticionEnProgreso}
-        />
+          style="verde"
+          />
 
         <Button
-          texto="Cancelar"
+          text="Cancelar"
           onClick={cancelUpdateTask}
-          estilo="gris"
-          deshabilitar={peticionEnProgreso}
+          style="gris"
         />
       </div>
     </form>

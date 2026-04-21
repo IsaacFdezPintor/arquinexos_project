@@ -65,122 +65,121 @@ class DatabaseSeeder extends Seeder
             'description' => 'Vivienda unifamiliar de 2 plantas con jardín y piscina. Superficie construida: 220 m².',
         ]);
 
-        // Laura: 15 ene → 22 ene
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Levantamiento topográfico',
             'description' => 'Medición y estudio del terreno existente.',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 16, 'start_date' => '2026-01-15', 'end_date' => '2026-01-22',
+            'start_date' => '2026-01-15', 'end_date' => '2026-01-22',
         ]);
-        // Laura: 23 ene → 5 feb
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Planos de distribución',
             'description' => 'Diseño de la distribución interior de la vivienda.',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 24, 'start_date' => '2026-01-23', 'end_date' => '2026-02-05',
+            'start_date' => '2026-01-23', 'end_date' => '2026-02-05',
         ]);
-        // Miguel: 1 feb → 10 feb
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Memoria descriptiva',
             'description' => 'Redacción de la memoria del proyecto básico.',
-            'status' => 'completada', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 20, 'start_date' => '2026-02-01', 'end_date' => '2026-02-10',
+            'start_date' => '2026-02-01', 'end_date' => '2026-02-10',
         ]);
-        // Ana: 20 ene → 3 feb
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Renders 3D fachada',
             'description' => 'Visualización 3D del exterior de la vivienda.',
-            'status' => 'completada', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 20, 'start_date' => '2026-01-20', 'end_date' => '2026-02-03',
+            'start_date' => '2026-01-20', 'end_date' => '2026-02-03',
         ]);
-        // Miguel: 16 feb → 5 mar
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Cálculo estructural',
             'description' => 'Dimensionamiento de cimentación, pilares y forjados.',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 30, 'start_date' => '2026-02-16', 'end_date' => '2026-03-05',
+            'start_date' => '2026-02-16', 'end_date' => '2026-03-05',
         ]);
-        // Laura: 6 mar → 25 mar
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Instalaciones eléctricas',
             'description' => 'Diseño de la instalación eléctrica completa.',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 25, 'start_date' => '2026-03-06', 'end_date' => '2026-03-25',
+            'start_date' => '2026-03-06', 'end_date' => '2026-03-25',
         ]);
-        // Ana: 21 feb → 15 mar
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Instalaciones de fontanería',
             'description' => 'Diseño de la red de agua fría, caliente y saneamiento.',
-            'status' => 'en_curso', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 20, 'start_date' => '2026-02-21', 'end_date' => '2026-03-15',
+            'start_date' => '2026-02-21', 'end_date' => '2026-03-15',
         ]);
-        // Pedro: 26 mar → 10 abr
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Planos de detalle constructivo',
             'description' => 'Detalles constructivos de encuentros y soluciones especiales.',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 30, 'start_date' => '2026-03-26', 'end_date' => '2026-04-10',
+            'start_date' => '2026-03-26', 'end_date' => '2026-04-10',
         ]);
-        // Pedro: 11 abr → 25 abr
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Mediciones y presupuesto',
             'description' => 'Mediciones de todas las partidas y presupuesto de ejecución.',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 15, 'start_date' => '2026-04-11', 'end_date' => '2026-04-25',
+            'start_date' => '2026-04-11', 'end_date' => '2026-04-25',
         ]);
-        // Laura: 16 abr → 20 may
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Supervisión de cimentación',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 40, 'start_date' => '2026-04-16', 'end_date' => '2026-05-20',
+            'start_date' => '2026-04-16', 'end_date' => '2026-05-20',
         ]);
-        // Miguel: 1 may → 10 jun
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Control de calidad materiales',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 50, 'start_date' => '2026-05-01', 'end_date' => '2026-06-10',
+            'start_date' => '2026-05-01', 'end_date' => '2026-06-10',
         ]);
-        // Ana: 5 may → 20 jun
+
         Task::create([
             'project_id' => $p1->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Certificaciones mensuales',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 30, 'start_date' => '2026-05-05', 'end_date' => '2026-06-20',
+            'start_date' => '2026-05-05', 'end_date' => '2026-06-20',
         ]);
 
         // ==========================================
@@ -198,96 +197,95 @@ class DatabaseSeeder extends Seeder
             'description' => 'Reforma integral de local comercial para uso de restaurante. 180 m² en planta baja.',
         ]);
 
-        // Ana: 4 feb → 15 feb
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Informe estado actual',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 12, 'start_date' => '2026-02-04', 'end_date' => '2026-02-15',
+            'start_date' => '2026-02-04', 'end_date' => '2026-02-15',
         ]);
-        // Pedro: 5 feb → 18 feb
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Gestión licencia de actividad',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 15, 'start_date' => '2026-02-05', 'end_date' => '2026-02-18',
+            'start_date' => '2026-02-05', 'end_date' => '2026-02-18',
         ]);
-        // Ana: 16 feb → 20 feb
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Estudio acústico',
-            'status' => 'completada', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 13, 'start_date' => '2026-02-16', 'end_date' => '2026-02-20',
+            'start_date' => '2026-02-16', 'end_date' => '2026-02-20',
         ]);
-        // Laura: 10 feb → 28 feb
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Diseño interior del restaurante',
             'description' => 'Distribución de salón, cocina, baños y terraza cubierta.',
-            'status' => 'en_curso', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 20, 'start_date' => '2026-02-10', 'end_date' => '2026-02-28',
+            'start_date' => '2026-02-10', 'end_date' => '2026-02-28',
         ]);
-        // Miguel: 9 mar → 25 mar
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Proyecto de climatización',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 15, 'start_date' => '2026-03-09', 'end_date' => '2026-03-25',
+            'start_date' => '2026-03-09', 'end_date' => '2026-03-25',
         ]);
-        // Pedro: 9 mar → 25 mar
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Protección contra incendios',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 15, 'start_date' => '2026-03-09', 'end_date' => '2026-03-25',
+            'start_date' => '2026-03-09', 'end_date' => '2026-03-25',
         ]);
-        // Laura: 26 mar → 10 abr
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Plano de evacuación',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 10, 'start_date' => '2026-03-26', 'end_date' => '2026-04-10',
+            'start_date' => '2026-03-26', 'end_date' => '2026-04-10',
         ]);
-        // Miguel: 1 abr → 15 abr
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Demoliciones y retirada de escombros',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 20, 'start_date' => '2026-04-01', 'end_date' => '2026-04-15',
+            'start_date' => '2026-04-01', 'end_date' => '2026-04-15',
         ]);
-        // Ana: 10 abr → 1 may
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Instalación de cocina industrial',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 30, 'start_date' => '2026-04-10', 'end_date' => '2026-05-01',
+            'start_date' => '2026-04-10', 'end_date' => '2026-05-01',
         ]);
-        // Pedro: 26 abr → 12 may
+
         Task::create([
             'project_id' => $p2->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Acabados y mobiliario',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 25, 'start_date' => '2026-04-26', 'end_date' => '2026-05-12',
+            'start_date' => '2026-04-26', 'end_date' => '2026-05-12',
         ]);
 
         // ==========================================
@@ -305,78 +303,77 @@ class DatabaseSeeder extends Seeder
             'description' => 'Proyecto de urbanización de 12 parcelas residenciales con viales, zonas verdes y servicios urbanos.',
         ]);
 
-        // Miguel: 16 abr → 30 abr
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Estudio geotécnico',
             'description' => 'Análisis del terreno y capacidad portante del suelo.',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 20, 'start_date' => '2026-04-16', 'end_date' => '2026-04-30',
+            'start_date' => '2026-04-16', 'end_date' => '2026-04-30',
         ]);
-        // Pedro: 19 feb → 8 mar
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Plano topográfico actualizado',
-            'status' => 'en_curso', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 15, 'start_date' => '2026-02-19', 'end_date' => '2026-03-08',
+            'start_date' => '2026-02-19', 'end_date' => '2026-03-08',
         ]);
-        // Ana: 16 mar → 9 abr
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Estudio de impacto ambiental',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 25, 'start_date' => '2026-03-16', 'end_date' => '2026-04-09',
+            'start_date' => '2026-03-16', 'end_date' => '2026-04-09',
         ]);
-        // Laura: 21 may → 20 jun
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Trazado de viales',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 30, 'start_date' => '2026-05-21', 'end_date' => '2026-06-20',
+            'start_date' => '2026-05-21', 'end_date' => '2026-06-20',
         ]);
-        // Miguel: 15 jun → 25 jul
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Red de saneamiento y pluviales',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 35, 'start_date' => '2026-06-15', 'end_date' => '2026-07-25',
+            'start_date' => '2026-06-15', 'end_date' => '2026-07-25',
         ]);
-        // Ana: 21 jun → 20 jul
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Red de abastecimiento de agua',
-            'status' => 'pendiente', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 25, 'start_date' => '2026-06-21', 'end_date' => '2026-07-20',
+            'start_date' => '2026-06-21', 'end_date' => '2026-07-20',
         ]);
-        // Pedro: 1 jun → 10 jul
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Alumbrado público y canalización eléctrica',
-            'status' => 'pendiente', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 30, 'start_date' => '2026-06-01', 'end_date' => '2026-07-10',
+            'start_date' => '2026-06-01', 'end_date' => '2026-07-10',
         ]);
-        // Ana: 21 jul → 15 ago
+
         Task::create([
             'project_id' => $p3->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Diseño de zonas verdes',
-            'status' => 'pendiente', 'priority' => 'baja',
+            'priority' => 'baja',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 20, 'start_date' => '2026-07-21', 'end_date' => '2026-08-15',
+            'start_date' => '2026-07-21', 'end_date' => '2026-08-15',
         ]);
 
         // ==========================================
@@ -394,68 +391,66 @@ class DatabaseSeeder extends Seeder
             'description' => 'Edificio de 4 plantas con 8 viviendas, garaje subterráneo y local comercial en planta baja.',
         ]);
 
-        // Laura: 1 mar → 25 mar 2025
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Estudio de viabilidad',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 30, 'start_date' => '2025-03-01', 'end_date' => '2025-03-25',
+            'start_date' => '2025-03-01', 'end_date' => '2025-03-25',
         ]);
-        // Ana: 20 mar → 20 abr 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Diseño volumétrico',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 40, 'start_date' => '2025-03-20', 'end_date' => '2025-04-20',
+            'start_date' => '2025-03-20', 'end_date' => '2025-04-20',
         ]);
-        // Miguel: 10 abr → 1 may 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Presupuesto estimativo',
-            'status' => 'completada', 'priority' => 'media',
+            'priority' => 'media',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 30, 'start_date' => '2025-04-10', 'end_date' => '2025-05-01',
+            'start_date' => '2025-04-10', 'end_date' => '2025-05-01',
         ]);
-        // Laura: 2 may → 15 jun 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker1->id,
             'name' => 'Planos de estructura',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker1->email, 'assigned_user_name' => $worker1->name,
-            'estimated_hours' => 50, 'start_date' => '2025-05-02', 'end_date' => '2025-06-15',
+            'start_date' => '2025-05-02', 'end_date' => '2025-06-15',
         ]);
-        // Pedro: 1 jun → 30 jul 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker4->id,
             'name' => 'Instalaciones completas',
-            'status' => 'completada', 'priority' => 'alta',
+            'priority' => 'alta',
             'assigned_user_email' => $worker4->email, 'assigned_user_name' => $worker4->name,
-            'estimated_hours' => 60, 'start_date' => '2025-06-01', 'end_date' => '2025-07-30',
+            'start_date' => '2025-06-01', 'end_date' => '2025-07-30',
         ]);
-        // Miguel: 1 jul → 15 ago 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker2->id,
             'name' => 'Estudio de seguridad y salud',
-            'status' => 'completada', 'priority' => 'alta',
             'assigned_user_email' => $worker2->email, 'assigned_user_name' => $worker2->name,
-            'estimated_hours' => 40, 'start_date' => '2025-07-01', 'end_date' => '2025-08-15',
+            'start_date' => '2025-07-01', 'end_date' => '2025-08-15',
         ]);
-        // Ana: 1 ago → 30 ago 2025
+
         Task::create([
             'project_id' => $p4->id,
             'assigned_user_id' => $worker3->id,
             'name' => 'Renders comerciales',
-            'status' => 'completada', 'priority' => 'baja',
+            'priority' => 'baja',
             'assigned_user_email' => $worker3->email, 'assigned_user_name' => $worker3->name,
-            'estimated_hours' => 30, 'start_date' => '2025-08-01', 'end_date' => '2025-08-30',
+            'start_date' => '2025-08-01', 'end_date' => '2025-08-30',
         ]);
     }
 }

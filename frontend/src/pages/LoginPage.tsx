@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/authContext";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { AuthService } from "../services/authService";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import Button from "../components/Button/Button";
 
 export default function LoginPage() {
@@ -14,7 +14,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   if (isAuthenticated) {
-    return <Navigate to="/sessions" replace />;
+    return <Navigate to="/projects" replace />;
   }
 
   async function handleSubmit() {
@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
       const session = await AuthService.login(email.trim(), password);
       login(session);
-      navigate("/sessions", { replace: true });
+      navigate("/projects", { replace: true });
     } catch {
       setError("Datos incorrectos o API no disponible");
     } finally {
@@ -52,37 +52,42 @@ export default function LoginPage() {
           </div>
         )}
 
-        <div className="auth-form__group">
-          <label htmlFor="email" className="auth-form__label">
-            <Mail size={16} /> Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="auth-form__input"
-            placeholder="tu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-            required
-          />
-        </div>
+        <fieldset className="auth-form__fieldset">
+          <legend>Datos de acceso</legend>
+          <p className="auth-form__help">Introduce tu correo y contrasena para entrar.</p>
 
-        <div className="auth-form__group">
-          <label htmlFor="password" className="auth-form__label">
-            <Lock size={16} /> Contraseña
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="auth-form__input"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
-        </div>
+          <div className="auth-form__group">
+            <label htmlFor="email" className="auth-form__label">
+              <Mail size={16} /> Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="auth-form__input"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="username"
+              required
+            />
+          </div>
+
+          <div className="auth-form__group">
+            <label htmlFor="password" className="auth-form__label">
+              <Lock size={16} /> Contraseña
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="auth-form__input"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+        </fieldset>
 
         <Button
           text={loading ? "Cargando..." : "Entrar"}

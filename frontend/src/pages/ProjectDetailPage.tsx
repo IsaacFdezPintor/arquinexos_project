@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { ProjectService } from "../services/projectService";
-import type { GrantTrap } from "../types/Project";
-import type { Task } from "../types/Task";
+import type { Project } from "../types/Project";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import TaskList from "../components/TaskList/TaskList";
 import Button from "../components/Button/Button";
 import { ToastContainer } from "../components/Toast/Toast";
 import { useToast } from "../components/Toast/useToast";
+import { useAuth } from "../auth/authContext";
 import { User, Folder, Calendar, MapPin, DollarSign, FileText, ArrowLeft, Edit2, Plus, CheckCircle } from "lucide-react";
-import "./ProjectDetailPage.css";
 
 function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [project, setProject] = useState<GrantTrap | null>(null);
+  const { user } = useAuth();
+  const canManageTasksAndProject = user?.role === "jefe";
+  const [project, setProject] = useState<Project | null>(null);
   const { toasts, addToast, removeToast } = useToast();
 
   const handleTaskEdit = (taskId: number) => {
@@ -68,11 +69,13 @@ function ProjectDetailPage() {
           <h1 className="session-detail__title">{project.name}</h1>
           <StatusBadge status={project.status} />
         </div>
-        <Button 
-          text={<><Edit2 size={14} /> Editar</>} 
-          onClick={() => navigate(`/projects/${project.id}/edit`, { state: { project } })}     
-          style="verde" 
-        />
+        {canManageTasksAndProject && (
+          <Button 
+            text={<><Edit2 size={14} /> Editar</>} 
+            onClick={() => navigate(`/projects/${project.id}/edit`, { state: { project } })}     
+            style="verde" 
+          />
+        )}
       </div>
 
       <div className="session-detail__body">
@@ -157,15 +160,17 @@ function ProjectDetailPage() {
         <div className="session-detail__title-section">
           <h1 className="session-detail__title"><CheckCircle size={28} style={{ color: "var(--color-primary)" }} /> Tareas</h1>
         </div>
-        <Button 
-          text={<><Plus size={16} /> Añadir Tarea</>} 
-          onClick={() => navigate(`/projects/${project.id}/tasks/new`)}
-          style="verde" 
-        />
+        {canManageTasksAndProject && (
+          <Button 
+            text={<><Plus size={16} /> Añadir Tarea</>} 
+            onClick={() => navigate(`/projects/${project.id}/tasks/new`)}
+            style="verde" 
+          />
+        )}
       </div>
 
       <div className="session-detail__tasks">
-        <TaskList projectId={project.id} onTaskEdit={handleTaskEdit} />
+        <TaskList projectId={project.id} onTaskEdit={handleTaskEdit} canManage={canManageTasksAndProject} />
       </div>
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />

@@ -6,6 +6,7 @@ import { AuthService } from "../services/authService";
 type AuthContextValue = {
     user: User | null;
     isAuthenticated: boolean;
+    isJefe: boolean; // <-- Agregamos esto aquí
     login: (session: AuthSession) => void;
     logout: () => void;
 }
@@ -37,14 +38,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setToken(null);
     }
 
-    const value = useMemo<AuthContextValue>(() => {
-        return {
-            user,
-            isAuthenticated: Boolean(user),
-            login,
-            logout
-        };
-    }, [user, token])
+   const value = useMemo<AuthContextValue>(() => {
+    return {
+        user,
+        isAuthenticated: Boolean(user),
+        // Hacemos la lógica aquí mismo, simple y directa
+        isJefe: user?.role?.toLowerCase() === "jefe", 
+        login,
+        logout
+    };
+}, [user, token])
 
       useEffect(() => {
         window.addEventListener("storage", syncFromStorage);

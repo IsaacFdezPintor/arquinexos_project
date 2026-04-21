@@ -24,7 +24,6 @@ return new class extends Migration
             // DATOS BÁSICOS:
             $table->string('name'); // Título de la tarea
             $table->text('description')->nullable(); // Descripción larga (puede estar vacía)
-            $table->string('status'); // Estado: Ej. "Pendiente", "En curso", "Terminada"
             $table->string('priority')->nullable(); // Prioridad: Ej. "Baja", "Media", "Alta"
 
             // DATOS DEL TRABAJADOR (Opcionales - REDUNDANTES, se mantienen por compatibilidad):
@@ -32,7 +31,6 @@ return new class extends Migration
             $table->string('assigned_user_name')->nullable();  // Guardamos el nombre del responsable
 
             // PLANIFICACIÓN:
-            $table->integer('estimated_hours')->nullable(); // Horas previstas de trabajo
             $table->date('start_date')->nullable(); // Fecha de inicio
             $table->date('end_date')->nullable();   // Fecha de entrega tope
 
