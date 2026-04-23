@@ -18,7 +18,7 @@ class AuthTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password123',
-            'role' => 'jefe',
+            'role' => 'boss',
         ]);
 
         $response->assertStatus(201)
@@ -26,7 +26,7 @@ class AuthTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
-            'role' => 'jefe',
+            'role' => 'boss',
         ]);
     }
 
@@ -36,12 +36,13 @@ class AuthTest extends TestCase
             'name' => 'Worker',
             'email' => 'worker@example.com',
             'password' => 'password123',
+            'role' => 'worker',
         ]);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('users', [
             'email' => 'worker@example.com',
-            'role' => 'trabajador',
+            'role' => 'worker',
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,21 +21,20 @@ class Task extends Model
      * @var array $fillable Definición de campos aptos para asignación masiva.
      * Se incluyen por seguridad para evitar ataques de inyección de datos.
      */
-    protected $fillable = [
-        'project_id', 'assigned_user_id', 'name', 'description',
-        'status', 'priority', 'assigned_user_email', 'assigned_user_name',
-        'estimated_hours', 'start_date', 'end_date',
-    ];
+  protected $fillable = [
+    'project_id', 
+    'name', 
+    'description',
+    'status', 
+    'priority', 
+    'start_date', 
+    'end_date',
+];
 
-    /**
-     * Define la relación con el modelo User asignado.
-     * * @return Relación de muchos a uno con User, devuelve el usuario responsable de la tarea.
-     */
-    public function assignedUser(): BelongsTo
-    {
-        // Se utiliza la clave foránea 'assigned_user_id' para identificar al usuario responsable.
-        return $this->belongsTo(User::class, 'assigned_user_id');
-    }
+    protected $casts = [
+    'priority' => \App\Enums\TaskPriority::class,
+];
+
 
     /**
      * Define la relación con el modelo Project.
@@ -43,6 +43,18 @@ class Task extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Relación N:M: Una tarea puede tener múltiples usuarios asignados.
+     * Un usuario puede trabajar en múltiples tareas.
+     * @return BelongsToMany Lista de usuarios asignados a la tarea
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'task_users')
+            ->withPivot('role')
+            ->withTimestamps();
     }
 
 }

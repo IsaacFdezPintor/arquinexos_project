@@ -38,13 +38,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación: Un usuario puede trabajar en muchos proyectos (N:M).
-     * Un proyecto puede tener muchos usuarios asignados.
-     * @return BelongsToMany Lista de proyectos en los que trabaja el usuario
+     * Relación N:M: Un usuario puede trabajar en múltiples tareas.
+     * Una tarea puede tener múltiples usuarios asignados.
+     * @return BelongsToMany Lista de tareas en las que trabaja el usuario
      */
-    public function projects(): BelongsToMany
+    public function assignedTasks(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class, 'project_users');
+        return $this->belongsToMany(Task::class, 'task_users')
+            ->withPivot('role')
+            ->withTimestamps();
     }
 
     /**
@@ -54,7 +56,7 @@ class User extends Authenticatable
     public function isJefe(): bool
     {
         // Compara el atributo role del modelo con la cadena 'jefe'.
-        return $this->role === 'jefe';
+        return $this->role === 'boss';
     }
 
     /**
@@ -64,6 +66,6 @@ class User extends Authenticatable
     public function isWorker(): bool
     {
         // Verifica si la cadena coincide exactamente con 'trabajador'.
-        return $this->role === 'trabajador';
+        return $this->role === 'worker';
     }
 }

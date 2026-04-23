@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         
-        \Log::info('👥 Petición de equipo', [
+        \Log::info(' Petición de equipo', [
             'user_id' => $user->id,
             'user_name' => $user->name,
             'user_role' => $user->role,
@@ -29,15 +29,15 @@ class UserController extends Controller
         ]);
         
         if (!$user->isJefe()) {
-            \Log::warning('❌ Usuario sin permisos para ver equipo', ['user_id' => $user->id]);
+            \Log::warning('Usuario sin permisos para ver equipo', ['user_id' => $user->id]);
             return response()->json(['error' => 'No tienes permisos para ver el equipo'], 403);
         }
 
-        $team = User::where('role', 'trabajador')
+        $team = User::where('role', 'worker')
             ->with('tasks')
             ->get();
 
-        \Log::info('✅ Equipo obtenido', ['count' => $team->count()]);
+        \Log::info('Equipo obtenido', ['count' => $team->count()]);
 
         return response()->json($team, 200);
     }
@@ -48,18 +48,18 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'nullable|in:jefe,trabajador',
+            'role' => 'nullable|in:boss,worker',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        $validated['role'] = $validated['role'] ?? 'trabajador';
+        $validated['role'] = $validated['role'] ?? 'worker';
         $user = User::create($validated);
         return response()->json($user, 201);
     }
 
-     public function show(User $user)
+    public function show(User $user)
     {
-        return response()->json($user->load(['tasks', 'projects']), 200);
+        return response()->json($user->load(['tasks', 'assignedTasks']), 200);
     }
 
     public function update(Request $request, User $user)

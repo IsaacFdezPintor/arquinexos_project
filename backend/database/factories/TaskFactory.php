@@ -21,11 +21,9 @@ class TaskFactory extends Factory
             'assigned_user_id' => null,
             'name' => fake()->sentence(4),
             'description' => fake()->optional()->paragraph(),
-            'status' => fake()->randomElement(['pendiente', 'en_progreso', 'completada']),
-            'priority' => fake()->randomElement(['alta', 'media', 'baja']),
+            'priority' => fake()->randomElement(['low', 'medium', 'high', 'urgent']),
             'assigned_user_email' => null,
             'assigned_user_name' => null,
-            'estimated_hours' => fake()->optional()->numberBetween(1, 100),
             'start_date' => fake()->optional()->date(),
             'end_date' => fake()->optional()->date(),
         ];

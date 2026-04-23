@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('client_name');
-            $table->string('status');
+            $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled']) ->default('pending'); 
             $table->decimal('budget', 12, 2)->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();

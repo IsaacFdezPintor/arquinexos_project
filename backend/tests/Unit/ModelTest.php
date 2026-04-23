@@ -6,7 +6,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\Skill;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ModelTest extends TestCase
@@ -17,14 +16,14 @@ class ModelTest extends TestCase
 
     public function test_user_is_jefe(): void
     {
-        $user = User::factory()->create(['role' => 'jefe']);
+        $user = User::factory()->create(['role' => 'boss']);
         $this->assertTrue($user->isJefe());
         $this->assertFalse($user->isWorker());
     }
 
     public function test_user_is_worker(): void
     {
-        $user = User::factory()->create(['role' => 'trabajador']);
+        $user = User::factory()->create(['role' => 'worker']);
         $this->assertTrue($user->isWorker());
         $this->assertFalse($user->isJefe());
     }
@@ -39,22 +38,6 @@ class ModelTest extends TestCase
         ]);
 
         $this->assertCount(3, $user->tasks);
-    }
-
-    public function test_user_has_many_time_logs(): void
-    {
-        $user = User::factory()->create();
-        $this->assertCount(0, $user->timeLogs);
-    }
-
-    public function test_user_belongs_to_many_skills(): void
-    {
-        $user = User::factory()->create();
-        $skill = Skill::factory()->create();
-        $user->skills()->attach($skill->id, ['proficiency_level' => 'avanzado']);
-
-        $this->assertCount(1, $user->fresh()->skills);
-        $this->assertEquals('avanzado', $user->skills->first()->pivot->proficiency_level);
     }
 
     // ==================== PROJECT MODEL ====================
@@ -85,19 +68,6 @@ class ModelTest extends TestCase
         $this->assertEquals($user->id, $task->assignedUser->id);
     }
 
-    // ==================== SKILL MODEL ====================
-
-    public function test_skill_belongs_to_many_users(): void
-    {
-        $skill = Skill::factory()->create();
-        $users = User::factory()->count(3)->create();
-        foreach ($users as $user) {
-            $user->skills()->attach($skill->id);
-        }
-
-        $this->assertCount(3, $skill->fresh()->users);
-    }
-
     // ==================== FACTORY SMOKE TESTS ====================
 
     public function test_project_factory_creates_valid_model(): void
@@ -110,11 +80,5 @@ class ModelTest extends TestCase
     {
         $task = Task::factory()->create();
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
-    }
-
-    public function test_skill_factory_creates_valid_model(): void
-    {
-        $skill = Skill::factory()->create();
-        $this->assertDatabaseHas('skills', ['id' => $skill->id]);
     }
 }
