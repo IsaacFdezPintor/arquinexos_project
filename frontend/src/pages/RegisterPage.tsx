@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/authContext";
 import { AuthService } from "../services/authService";
 import { isAxiosError } from "axios";
-import { Mail, Lock, User, Shield } from "lucide-react";
+import { Mail, Lock, User, Shield, ArrowLeft } from "lucide-react";
 import Button from "../components/Button/Button";
 
 const authService = AuthService;
@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("trabajador");
+  const [role, setRole] = useState("worker");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +39,7 @@ export default function RegisterPage() {
       navigate("/projects");
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 422) {
-        setError("Ya existe una cuenta con ese email");
+        setError("Error de validación: " + (err.response.data.message || "Revisa los datos ingresados"));
       } else {
         setError("Error de conexión. Inténtalo más tarde.");
       }
@@ -50,6 +50,7 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
+     
       <form
         className="auth-form"
         onSubmit={(e) => {
@@ -57,6 +58,9 @@ export default function RegisterPage() {
           handleSubmit();
         }}
       >
+          <Link to="/team" className="session-detail__back">
+          <ArrowLeft size={18} /> Volver
+        </Link>
         <div className="auth-form__header">
           <h2> Crear cuenta</h2>
           <p >Únete a GrantTrap y gestiona tus proyectos </p>
@@ -113,8 +117,8 @@ export default function RegisterPage() {
               onChange={(e) => setRole(e.target.value)}
               required
             >
-              <option value="trabajador">Trabajador</option>
-              <option value="jefe">Jefe</option>
+              <option value="worker">Trabajador</option>
+              <option value="boss">Jefe</option>
             </select>
           </div>
 
@@ -146,9 +150,6 @@ export default function RegisterPage() {
           style="verde"
         />
 
-        <p className="auth-form__footer">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-        </p>
       </form>
     </div>
   );

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            $table->enum('priority', ['low', 'medium', 'high', 'urgent']) ->default('medium'); 
+            $table->enum('priority', ['low', 'medium', 'high', 'urgent', 'completed']) ->default('medium'); 
             
             $table->date('start_date')->nullable(); 
             $table->date('end_date')->nullable();  

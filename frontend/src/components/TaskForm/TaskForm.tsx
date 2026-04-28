@@ -15,10 +15,10 @@ type TaskFormProps = {
 };
 
 const PRIORITY_OPTIONS: { value: TaskPriority; label: string }[] = [
-  { value: "baja", label: "Pendiente" },
-  { value: "media", label: "En Progreso" },
-  { value: "alta", label: "Completada" },
-  { value: "urgente", label: "Urgente" },];
+  { value: "low", label: "Baja" },
+  { value: "medium", label: "Medio" },
+  { value: "high", label: "Alta" },
+  { value: "urgent", label: "Urgente" },];
 
 export default function TaskForm({
   addTask,
@@ -28,11 +28,12 @@ export default function TaskForm({
   projectId,
 }: TaskFormProps) {
   const [name, setName] = useState(taskSeleccionada?.name ?? "");
-  const [priority, setPriority] = useState<TaskPriority>(taskSeleccionada?.priority ?? "baja");
+  const [priority, setPriority] = useState<TaskPriority>(taskSeleccionada?.priority ?? "low");
   const [startDate, setStartDate] = useState(taskSeleccionada?.start_date ?? "");
   const [endDate, setEndDate] = useState(taskSeleccionada?.end_date ?? "");
-  const [assignedUserId, setAssignedUserId] = useState(taskSeleccionada?.assigned_user_id?.toString() ?? "");
-  const [assignedUserName, setAssignedUserName] = useState(taskSeleccionada?.assigned_user_name ?? "");
+  const [assignedUserIds, setAssignedUserIds] = useState<number[]>(
+    taskSeleccionada?.users?.map(u => u.id) || (taskSeleccionada?.assigned_user_id ? [taskSeleccionada.assigned_user_id] : [])
+  );
   const [users, setUsers] = useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [usersError, setUsersError] = useState<string | null>(null);
@@ -53,44 +54,36 @@ export default function TaskForm({
   }, []);
 
   const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const userId = e.target.value;
-    setAssignedUserId(userId);
-    
-    // Buscar el usuario seleccionado y guardar su nombre
-    const selectedUser = users.find(u => u.id.toString() === userId);
-    if (selectedUser) {
-      setAssignedUserName(selectedUser.name);
-    }
+    const selectedOptions = Array.from(e.target.selectedOptions, option => Number(option.value));
+    setAssignedUserIds(selectedOptions);
   };
 
   function handleSubmit() {
     if (name.trim().length > 0 && projectId && startDate) {
 
       if (taskSeleccionada != null) {
-        const tarea: Task = {
+        const tarea: any = {
           ...taskSeleccionada,
           name,
           priority,
           start_date: startDate,
           end_date: endDate,
-          assigned_user_id: assignedUserId ? Number(assignedUserId) : undefined,
-          assigned_user_name: assignedUserName,
           description: description || undefined,
+          user_ids: assignedUserIds, // Para la relación N:M
         };
         updateTask(tarea);
       } else {
-        const tarea: Task = {
+        const tarea: any = {
           project_id: projectId,
           name: name.trim(),
           priority,
           start_date: startDate,
           end_date: endDate,
-          assigned_user_id: assignedUserId ? Number(assignedUserId) : undefined,
-          assigned_user_name: assignedUserName,
           description: description || undefined,
+          user_ids: assignedUserIds, // Para la relación N:M
         };
         addTask(tarea);
-            }
+      }
     }
   }
 
@@ -99,7 +92,6 @@ export default function TaskForm({
       className="task-form"
       onSubmit={(e) => {
         e.preventDefault();
-        handleSubmit();
       }}
     >
       <fieldset className="form-fieldset">
@@ -169,35 +161,35 @@ export default function TaskForm({
           />
         </div>
 
-        {/* Usuario Asignado */}
-        <div className="form-group">
+        {/* Usuarios Asignados (Multi-select) */}
+        <div className="form-group form-group--full">
           <label className="form-label">
-            <UserIcon size={16} /> Asignar a Usuario
+            <UserIcon size={16} /> Asignar a Usuarios (múltiples)
           </label>
           <select 
-            value={assignedUserId} 
+            multiple
+            value={assignedUserIds.map(String)}
             onChange={handleUserChange}
-            className="form-select"
+            className="form-select form-select--multiple"
             disabled={loadingUsers || users.length === 0}
+            size={Math.min(5, users.length + 1)}
           >
-            <option value="">
-              {loadingUsers ? "Cargando usuarios..." : users.length === 0 ? "No hay usuarios disponibles" : "Seleccionar usuario"}
-            </option>
             {users.map((user) => (
               <option key={user.id} value={user.id}>
                 {user.name} ({user.email})
               </option>
             ))}
           </select>
+<p className="form-help">            Selecciona múltiples usuarios usando Ctrl/Cmd + Click
+          </p>
           {usersError && !loadingUsers && (
             <small style={{ color: "var(--color-error)", marginTop: "0.25rem", display: "block" }}>
               {usersError}
             </small>
           )}
           {!usersError && users.length === 0 && !loadingUsers && (
-            <small style={{ color: "var(--color-error)", marginTop: "0.25rem", display: "block" }}>
-              No se encontraron usuarios. Verifica que el servidor esté funcionando.
-            </small>
+<p className="form-help">              No se encontraron usuarios. Verifica que el servidor esté funcionando.
+            </p>
           )}
         </div>
         </div>

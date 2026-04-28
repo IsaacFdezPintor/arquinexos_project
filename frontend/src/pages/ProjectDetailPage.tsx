@@ -14,7 +14,7 @@ function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const canManageTasksAndProject = user?.role === "jefe";
+  const canManageTasksAndProject = user?.role === "boss";
   const [project, setProject] = useState<Project | null>(null);
   const { toasts, addToast, removeToast } = useToast();
 

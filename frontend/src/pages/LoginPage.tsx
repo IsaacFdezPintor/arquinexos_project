@@ -43,7 +43,7 @@ export default function LoginPage() {
       >
         <div className="auth-form__header">
           <h2> Iniciar sesión</h2>
-          <p>Accede a tu cuenta de StudioSnap</p>
+          <p>Accede a tu cuenta de GrantTrap</p>
         </div>
 
         {error && (
@@ -95,9 +95,7 @@ export default function LoginPage() {
           style="verde"
         />
 
-        <p className="auth-form__footer">
-          ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
-        </p>
+        
       </form>
     </div>
   );

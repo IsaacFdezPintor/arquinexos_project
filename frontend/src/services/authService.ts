@@ -13,7 +13,7 @@ export const AuthService = {
     return http.get("/auth/me").then((r) => r.data);
   },
 
-async register(email: string, password: string, name: string, role: string = "trabajador") {
+async register(email: string, password: string, name: string, role: string = "worker") {
   const response = await http.post("/auth/register", {
     name,
     email,

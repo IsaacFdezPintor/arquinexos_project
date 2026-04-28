@@ -87,6 +87,23 @@ class TaskController extends Controller
     {
         $user = $request->user();
 
+        // Los trabajadores solo pueden actualizar la prioridad si están asignados a la tarea
+        if ($user->isWorker()) {
+            $isAssigned = $task->users()->where('users.id', $user->id)->exists();
+            if (!$isAssigned) {
+                return response()->json(['error' => 'Acceso denegado'], 403);
+            }
+
+            // Solo permitir actualizar la prioridad
+            $validated = $request->validate([
+                'priority' => ['nullable', 'string'],
+            ]);
+
+            $task->update($validated);
+            return response()->json($task->load(['project', 'users']), 200);
+        }
+
+        // Los jefes pueden actualizar todos los campos
         if (!$user->isJefe()) {
             return response()->json(['error' => 'No autorizado'], 403);
         }

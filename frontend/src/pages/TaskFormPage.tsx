@@ -53,7 +53,7 @@ export default function TaskFormPage() {
       }
       setTimeout(() => navigate(backUrl), 400);
     } catch (error: any) {
-      console.error(`❌ Error al ${isEditMode ? 'actualizar' : 'crear'} tarea:`, error);
+      console.error(`Error al ${isEditMode ? 'actualizar' : 'crear'} tarea:`, error);
       
       let errorMessage = `Error al ${isEditMode ? 'actualizar' : 'crear'} la tarea`;
       if (error.response?.data?.errors) {
@@ -124,7 +124,7 @@ export default function TaskFormPage() {
         cancelUpdateTask={() => navigate(backUrl)} 
         taskSeleccionada={task}  
         projectId={Number(projectId)}
-      />     
+      />
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>

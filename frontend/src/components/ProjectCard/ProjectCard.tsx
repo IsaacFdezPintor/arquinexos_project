@@ -3,6 +3,7 @@ import type { Project } from "../../types/Project";
 import StatusBadge from "../StatusBadge/StatusBadge";
 import Button from "../Button/Button";
 import { User, Folder, Calendar, MapPin, Eye, Edit2, Trash2 } from "lucide-react";
+import "./ProjectCard.css";
 
 type ProjectCardProps = {
   project: Project;
@@ -37,21 +38,17 @@ function ProjectCard({ project, onDelete, onEdit, canManage = false }: ProjectCa
   return (
     <div className="scard">
       <div className="scard-header"> <StatusBadge status={project.status} /> </div>
-
+      {/* Imagen eliminada */}
       <div className="scard-body">
-        <h3 className="scard-title" onClick={() => navigate(`/projects/${project.id}`)} > {project.name} </h3>
-
+        <h3 className="scard-title">{project.name}</h3>
         <p className="scard-client"><User size={16} style={{display: 'inline', marginRight: '6px'}} /> {project.client_name}</p>
-
         <div className="scard-meta">
           <span className="category-tag"><Folder size={14} style={{display: 'inline', marginRight: '4px'}} /> {project.type}</span>
           <span className="scard-date"><Calendar size={14} style={{display: 'inline', marginRight: '4px'}} /> {formatDate(project.start_date)}</span>
         </div>
-
         {project.address && (
           <p className="scard-location"><MapPin size={16} style={{display: 'inline', marginRight: '6px'}} /> {project.address}</p>
         )}
-
         <div className="scard-footer">
           <span className="scard-price"> {formatPrice(project.budget || 0)}</span>
           <div className="scard-actions">

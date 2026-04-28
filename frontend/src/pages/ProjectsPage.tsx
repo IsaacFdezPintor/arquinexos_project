@@ -9,14 +9,15 @@ import Button from "../components/Button/Button";
 import { ToastContainer } from "../components/Toast/Toast";
 import { useToast } from "../components/Toast/useToast";
 import { useAuth } from "../auth/authContext";
-import { Plus, Briefcase } from "lucide-react";
+import { Plus, Briefcase, ClipboardList, ListChecks, Ban, FolderKanban } from "lucide-react";
 
 export default function ProjectsPage() {
   const { user } = useAuth();
-  const canManageProjects = user?.role === "jefe";
+  const canManageProjects = user?.role === "boss";
 
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<Project | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -69,6 +70,12 @@ export default function ProjectsPage() {
     }
   };
 
+
+  // Filtrar proyectos según el estado seleccionado
+  const filteredProjects = statusFilter
+    ? projects.filter((p) => p.status === statusFilter)
+    : projects;
+
   return (
     <div className="projects-page">
       <div className="projects-page__header">
@@ -76,8 +83,7 @@ export default function ProjectsPage() {
           <Briefcase size={32} className="projects-page__icon" />
           <div>
             <h1>Mis Proyectos</h1>
-            <p className="projects-page__subtitle">{projects.length} proyecto{projects.length !== 1 ? 's' : ''}</p>
-
+            <p className="projects-page__subtitle">{filteredProjects.length} proyecto{filteredProjects.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
         {canManageProjects && (
@@ -87,13 +93,57 @@ export default function ProjectsPage() {
         )}
       </div>
 
+      <nav className="navbar__links">
+  {/* Botón: TODOS */}
+  <button
+    type="button"
+    className={`navbar__link ${statusFilter === "" ? "navbar__link--active" : ""}`}
+    onClick={() => setStatusFilter("")}
+  >
+    <FolderKanban size={16} /> Todos
+  </button>
 
+  {/* Botón: PENDIENTE */}
+  <button
+    type="button"
+    className={`navbar__link ${statusFilter === "pending" ? "navbar__link--active" : ""}`}
+    onClick={() => setStatusFilter("pending")}
+  >
+    <ClipboardList size={16} /> Pendiente
+  </button>
+
+  {/* Botón: EN PROCESO */}
+  <button
+    type="button"
+    className={`navbar__link ${statusFilter === "in_progress" ? "navbar__link--active" : ""}`}
+    onClick={() => setStatusFilter("in_progress")}
+  >
+    <ListChecks size={16} /> En Proceso
+  </button>
+
+  {/* Botón: COMPLETADO */}
+  <button
+    type="button"
+    className={`navbar__link ${statusFilter === "completed" ? "navbar__link--active" : ""}`}
+    onClick={() => setStatusFilter("completed")}
+  >
+    <Briefcase size={16} /> Completado
+  </button>
+
+  {/* Botón: CANCELADO */}
+  <button
+    type="button"
+    className={`navbar__link ${statusFilter === "cancelled" ? "navbar__link--active" : ""}`}
+    onClick={() => setStatusFilter("cancelled")}
+  >
+    <Ban size={16} /> Cancelado
+  </button>
+</nav>
       {loading ? (
         <LoadingSpinner message="Cargando proyectos..." />
       ) : (
         <ProjectList
-          projects={projects}
-          loading={loading}
+          projects={filteredProjects}
           deletingId={deletingId}
           onDelete={handleDeleteClick}
           onEdit={handleEdit}
@@ -102,22 +152,14 @@ export default function ProjectsPage() {
       )}
 
       {deleteTarget && (
-        <div className="modal-overlay" onClick={() => setDeleteTarget(null)}>
-            <div className="modal-header">
-              <h2>Confirmar eliminación</h2>
-              <button className="modal-close" onClick={() => setDeleteTarget(null)}>✕</button>
-            </div>
-            <div className="modal-body">
-              <ConfirmDelete
-                title={deleteTarget.name}
-                onConfirm={handleDeleteConfirm}
-                onCancel={() => setDeleteTarget(null)}
-              />
-            </div>
-          </div>
+        <div className="modal-overlay">
+          <ConfirmDelete
+            title={deleteTarget.name}
+            onConfirm={handleDeleteConfirm}
+            onCancel={() => setDeleteTarget(null)}
+          />
+        </div>
       )}
-
-    
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>

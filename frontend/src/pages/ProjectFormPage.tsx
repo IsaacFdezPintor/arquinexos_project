@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Navigate, useNavigate ,useLocation } from "react-router-dom";
+import { Navigate, useNavigate ,useLocation, Link } from "react-router-dom";
 import { ProjectService } from "../services/projectService.ts";
-import SessionForm from "../components/ProjectForm/ProjectForm.tsx";
 import { ToastContainer } from "../components/Toast/Toast.tsx";
 import { useToast } from "../components/Toast/useToast.tsx";
 import { useAuth } from "../auth/authContext.tsx";
+import { ArrowLeft, FolderKanban } from "lucide-react";
+import ProjectForm from "../components/ProjectForm/ProjectForm.tsx";
 
 
 function ProjectFormPage() {
@@ -14,6 +15,8 @@ function ProjectFormPage() {
   const [loading, setLoading] = useState(false);
   const { toasts, addToast, removeToast } = useToast();
   const selectedProject = location.state?.project || null;
+  const isEditMode = Boolean(selectedProject);
+
 
   if (user && !isJefe) {
     return <Navigate to="/projects" replace />;
@@ -40,15 +43,22 @@ function ProjectFormPage() {
 
   return (
     <div className="session-form-page">
-      <div className="session-form-page__header">
-      </div>
-      <SessionForm 
+      <Link to={"/projects"} className="session-detail__back">
+        <ArrowLeft size={18} /> Volver
+      </Link>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem" }}>
+        <FolderKanban size={32} style={{ color: "var(--color-primary)" }} />
+        <h1 style={{ margin: 0 }}>{isEditMode ? "Editar Proyecto" : "Nuevo Proyecto"}</h1>
+        </div>
+      <ProjectForm 
         addProject={handleSubmit}  
         updateProject={handleSubmit}
         peticionEnProgreso={loading}  
         cancelUpdateProject={() => navigate("/projects")} 
         selectedProject={selectedProject}  
-      />     
+      />  
+
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );

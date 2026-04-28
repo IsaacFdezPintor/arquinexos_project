@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         isAuthenticated: Boolean(user),
         // Hacemos la lógica aquí mismo, simple y directa
-        isJefe: user?.role?.toLowerCase() === "jefe", 
+        isJefe: user?.role?.toLowerCase() === "boss", // <-- Aquí asumimos que el rol "boss" es el equivalente a "jefe"
         login,
         logout
     };

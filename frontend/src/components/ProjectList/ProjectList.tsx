@@ -4,7 +4,6 @@ import "./ProjectList.css";
 
 type ProjectListProps = {
   projects: Project[];
-  loading: boolean;
   deletingId: number | null;
   onDelete: (project: Project) => void;
   onEdit: (project: Project) => void;
@@ -13,19 +12,11 @@ type ProjectListProps = {
 
 function ProjectList({
   projects,
-  loading,
   deletingId,
   onDelete,
   onEdit,
   canManage = false,
 }: ProjectListProps) {
-  if (loading) {
-    return (
-      <div className="project-list-container">
-        <p>Cargando ....</p>
-      </div>
-    );
-  }
 
   if (!projects.length) {
     return (

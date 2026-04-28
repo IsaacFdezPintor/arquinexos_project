@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { userService } from "../services/userService";
 import type { User } from "../types/Auth";
-import { Users, Mail, Shield, Calendar } from "lucide-react";
+import { Users, Mail, Shield, Calendar, Link, Plus } from "lucide-react";
 import Button from "../components/Button/Button";
 import ConfirmDelete from "../components/ConfirmDelete/ConfirmDelete";
 import { ToastContainer } from "../components/Toast/Toast";
 import { useToast } from "../components/Toast/useToast";
 import LoadingSpinner from "../components/Spinner/LoadingSpinner"; 
+import { useNavigate } from "react-router-dom";
 
 function formatDate(iso?: string): string {
   if (!iso) return "-";
@@ -26,6 +27,7 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
   const { toasts, addToast, removeToast } = useToast();
+  const navigation = useNavigate();
 
   useEffect(() => {
     loadTask();
@@ -73,7 +75,9 @@ export default function TeamPage() {
             <p className="projects-page__subtitle">{users.length} usuario{users.length !== 1 ? 's' : ''}</p>
 
           </div>
+          
         </div>
+            <Button text={<><Plus size={16} /> Añadir miembro al equipo</>} onClick={() => navigation("/register")} style="verde" />
       </div>
 
 
@@ -82,7 +86,7 @@ export default function TeamPage() {
       ) : (
         <div className="team-page__grid">
           {users.map((user) => {
-            const role = user.role?.toLowerCase() === "jefe" ? "jefe" : "trabajador";
+            const role = user.role?.toLowerCase() === "b" ? "boss" : "worker";
 
             return (
               <article key={user.id} className="team-card">
@@ -104,7 +108,7 @@ export default function TeamPage() {
                 <div className="team-card__row">
                   <Shield size={16} />
                   <span className={`team-card__role team-card__role--${role}`}>
-                    {role === "jefe" ? "Jefe" : "Trabajador"}
+                    {role === "boss" ? "Jefe" : "Worker"}
                   </span>
                 </div>
 
@@ -127,11 +131,7 @@ export default function TeamPage() {
       )}
 
       {deleteTarget && (
-        <div className="modal-overlay" onClick={() => setDeleteTarget(null)}>
-            <div className="modal-header">
-              <h2>Confirmar eliminación</h2>
-              <button className="modal-close" onClick={() => setDeleteTarget(null)}>✕</button>
-            </div>
+        <div className="modal-overlay">
             <div className="modal-body">
               <ConfirmDelete
                 title={deleteTarget.name}

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import './Toast.css';
+import { X,Check, Info } from 'lucide-react';
 
 // Tipos
 export type ToastType = "success" | "error" | "info";
@@ -31,7 +32,7 @@ function ToastItem({ toast, onClose }: { toast: ToastMessage; onClose: () => voi
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const icons: Record<ToastType, string> = { success: "✅", error: "❌", info: "ℹ️" };
+  const icons: Record<ToastType, React.ReactNode> = { success: <Check size={24} color="black" />, error: <X size={24} color="black" />, info: <Info size={24} color="black" /> };
 
   return (
     <div className={`toast toast--${toast.type}`} onClick={onClose}>

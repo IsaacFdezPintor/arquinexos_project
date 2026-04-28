@@ -28,7 +28,6 @@ export default function HomePage() {
             <Button text="Ver mis proyectos" onClick={() => navigate("/projects")} style="verde"/>
           ) : (
             <>
-              <Button text="Crear cuenta gratis" onClick={() => navigate("/register")} style="verde" />
               <Button text="Iniciar sesión" onClick={() => navigate("/login")} style="gris" />
             </>
           )}

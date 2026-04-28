@@ -1,4 +1,4 @@
-export type ProjectStatus = "pendiente" | "confirmada" | "completada" | "cancelada";
+export type ProjectStatus = "pending" | "in_progress" | "completed" | "cancelled";
 
 export type Project = {
   id: number;
@@ -11,6 +11,7 @@ export type Project = {
   start_date: string;        // Fecha de inicio
   end_date?: string;         // Fecha de fin
   address?: string;          // Dirección
+  // image eliminado
   created_at?: string;
   updated_at?: string;
 };

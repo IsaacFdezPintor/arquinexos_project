@@ -8,10 +8,10 @@ import './StatusBadge.css';
 
 // Configuración de cada estado: texto, clase CSS e icono
 const STATUS_CONFIG: Record<ProjectStatus, { label: string; className: string; Icon: React.ReactNode }> = {
-  pendiente:   { label: "Pendiente",   className: "badge--pending",   Icon: <Clock size={12} /> },
-  confirmada:  { label: "Confirmada",  className: "badge--confirmed", Icon: <CheckCircle size={12} /> },
-  completada:  { label: "Completada",  className: "badge--completed", Icon: <CheckCircle2 size={12} /> },
-  cancelada:   { label: "Cancelada",   className: "badge--cancelled", Icon: <XCircle size={12} /> },
+  pending:   { label: "Pendiente",   className: "badge--pending",   Icon: <Clock size={12} /> },
+  in_progress:  { label: "En Proceso",  className: "badge--in_progress", Icon: <CheckCircle size={12} /> },
+  completed:  { label: "Completada",  className: "badge--completed", Icon: <CheckCircle2 size={12} /> },
+  cancelled:   { label: "Cancelada",   className: "badge--cancelled", Icon: <XCircle size={12} /> },
 };
 
 // Props del componente
@@ -20,7 +20,7 @@ type StatusBadgeProps = {
 };
 
 export default function StatusBadge({status}: StatusBadgeProps) {
-  const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG.pendiente;
+  const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
 
   return (
     <span className={`badge ${cfg.className}`}>

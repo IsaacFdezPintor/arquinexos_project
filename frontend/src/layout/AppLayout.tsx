@@ -45,7 +45,7 @@ export default function AppLayout() {
 
             {/* 4. Equipo: Solo si es Jefe */}
             {isAuthenticated && isJefe && (
-              <NavLink to="/equipo" className="navbar__link">
+              <NavLink to="/team" className="navbar__link">
                 <Users size={16} />
                 Equipo
               </NavLink>
@@ -73,15 +73,10 @@ export default function AppLayout() {
                   <Lock size={16} />
                   Iniciar sesión
                 </NavLink>
-                <NavLink to="/register">
-                  <Button 
-                    text="Registro" 
-                    onClick={() => {}} 
-                    style="verde" 
-                  />
-                </NavLink>
+                
               </>
             )}
+
           </div>
         </div>
       </header>

@@ -30,7 +30,8 @@ class Project extends Model
 protected $fillable = [
     'name', 'type', 'client_name', 'status', 
     'budget', 'start_date', 'end_date', 'address', 'description'
-];protected $casts = [
+];
+protected $casts = [
     'status' => \App\Enums\ProjectStatus::class,
 ];
 

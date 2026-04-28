@@ -31,7 +31,7 @@ export default function App() {
         <Route path="/projects/:id/edit" element={<ProtectedRoute > <ProjectFormPage /> </ProtectedRoute>} />
         <Route path="/projects/:id/tasks/new" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
         <Route path="/projects/:id/tasks/:taskId/edit" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
-        <Route path="/equipo" element={<ProtectedRoute> <TeamPage /> </ProtectedRoute>} />
+        <Route path="/team" element={<ProtectedRoute> <TeamPage /> </ProtectedRoute>} />
 
         {/* ---- RUTA 404 ---- */}
         <Route path="*" element={<NotFoundPage />} />

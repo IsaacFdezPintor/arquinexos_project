@@ -33,13 +33,18 @@ get(id: number): Promise<Project> {
         return http.delete<void>(API_URL + "/" + id).then(() => {})
   },
 
-// create(data) — Crea una nueva sesión fotográfica.
-create(data: { title: string; completed?: boolean }): Promise<Project> {
-  return http.post<Project>(API_URL, data).then(response => response.data);
+
+// create(data) — Crea un nuevo proyecto (con posible imagen)
+create(data: any): Promise<Project> {
+  return http.post<Project>(API_URL, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }).then(response => response.data);
 },
 
-// update(id, data) — Actualiza un proyecto existente.
+// update(id, data) — Actualiza un proyecto existente (con posible imagen)
 update(id: number, data: any): Promise<Project> {
-  return http.patch<Project>(`${API_URL}/${id}`, data).then(response => response.data);
+  return http.post<Project>(`${API_URL}/${id}?_method=PATCH`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }).then(response => response.data);
 },
 };

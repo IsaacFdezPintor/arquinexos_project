@@ -1,5 +1,39 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     version="1.0.0",
+ *     title="Arquinexos API",
+ *     description="API REST para la gestión de proyectos y tareas de arquitectura",
+ *     contact={
+ *         "name": "Isaac Fernández Pintor",
+ *         "email": "contact@arquinexos.local"
+ *     },
+ *     license={
+ *         "name": "MIT"
+ *     }
+ * )
+ */
+
+/**
+ * @OA\Server(
+ *     url="http://localhost:8000/api",
+ *     description="Servidor de desarrollo"
+ * )
+ */
+
+/**
+ * @OA\SecurityScheme(
+ *     type="http",
+ *     name="sanctum",
+ *     in="header",
+ *     scheme="bearer",
+ *     bearerFormat="JWT",
+ *     securityScheme="sanctum",
+ *     description="Token de autenticación Laravel Sanctum"
+ * )
+ */
+
 use Illuminate\Support\Facades\Route;
 // Aquí llamamos a los "Controladores" (los que ejecutan las órdenes)
 use App\Http\Controllers\Api\ProjectController;

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Project, ProjectStatus } from "../../types/Project";
 import Button from "../Button/Button";
-import { FileText, User, Calendar, MapPin, DollarSign, CheckCircle, MessageSquare, Zap, Link, ArrowLeft } from "lucide-react";
+import { FileText, User, Calendar, MapPin, Euro, CheckCircle, MessageSquare, Zap } from "lucide-react";
 import "./ProjectForm.css";
 
 type ProjectFormProps = {
@@ -14,9 +14,10 @@ type ProjectFormProps = {
 
 
 const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
-  { value: "pendiente", label: "Pendiente" },
-  { value: "completada", label: "Completada" },
-  { value: "cancelada", label: "Cancelada" },
+  { value: "pending", label: "Pendiente" },
+  { value: "in_progress", label: "En Progreso" },
+  { value: "completed", label: "Completada" },
+  { value: "cancelled", label: "Cancelada" },
 ];
 
  function ProjectForm({ addProject , selectedProject, updateProject,cancelUpdateProject}: ProjectFormProps) {
@@ -24,59 +25,50 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
   const [name, setName] = useState(selectedProject?.name ?? "");
   const [type, setType] = useState(selectedProject?.type ?? "Edificación");
   const [clientName, setClientName] = useState(selectedProject?.client_name ?? "");
-  const [status, setStatus] = useState<ProjectStatus>(selectedProject?.status ?? "pendiente");
-  const [budget, setBudget] = useState(selectedProject?.budget ?? 0);
+  const [status, setStatus] = useState<ProjectStatus>(selectedProject?.status ?? "pending");
+  const [budget, setBudget] = useState((selectedProject?.budget ?? 0).toString());
   const [startDate, setStartDate] = useState(selectedProject?.start_date ?? "");
   const [endDate, setEndDate] = useState(selectedProject?.end_date ?? "");
   const [address, setAddress] = useState(selectedProject?.address ?? "");
   const [description, setDescription] = useState(selectedProject?.description ?? "");
 
-  
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (name.trim().length > 0 && clientName.trim().length > 0) {
+      const projectData = {
+        id: selectedProject?.id,
+        name,
+        type,
+        client_name: clientName,
+        status,
+        budget: parseFloat(budget) || 0,
+        start_date: startDate,
+        end_date: endDate,
+        address,
+        description,
+        created_at: selectedProject?.created_at || new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
       if (selectedProject != null) {
-        const newProyecto: Project = {
-          ...selectedProject,
-          name,
-          type,
-          client_name: clientName,
-          status,
-          budget,
-          start_date: startDate,
-          end_date: endDate,
-          address,
-          description,
-        };
-        updateProject(newProyecto);
+        updateProject(projectData as Project);
       } else {
-        const newProyecto = {
-          name: name.trim(),
-          type,
-          client_name: clientName.trim(),
-          status,
-          budget,
-          start_date: startDate,
-          end_date: endDate,
-          address,
-          description,
-        };
-        addProject(newProyecto);
+        addProject(projectData);
       }
     }
   }
 
   return (
-    <>
-      <h2>{selectedProject ? `Editar proyecto: ${selectedProject.name}` : "Agregar nuevo proyecto"}</h2>
-      <form className="session-form" onSubmit={handleSubmit} >
-        <Link to="/projects" className="session-detail__back">
-          <ArrowLeft size={18} /> Volver a proyectos
-        </Link>
+    <form className="task-form" onSubmit={handleSubmit}>
+      <fieldset className="form-fieldset">
+        <legend>Datos principales del proyecto</legend>
+        <p className="form-help">Rellena los datos obligatorios para crear o editar el proyecto.</p>
+
         <div className="form-grid">
-          {/* Nombre del Proyecto */}
-          <div className="form-group">
-            <label className="form-label"> <FileText size={16} /> Nombre del Proyecto
+        {/* Nombre de la Tarea */}
+        <div className="form-group">
+          <label className="form-label">
+              <FileText size={16} /> Nombre del Proyecto
             </label>
             <input
               type="text"
@@ -90,9 +82,15 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
 
           {/* Tipo de Proyecto */}
           <div className="form-group">
-            <label className="form-label"> <Zap size={16} /> Tipo de Proyecto
+            <label className="form-label"> 
+              <Zap size={16} /> Tipo de Proyecto
             </label>
-            <select value={type} onChange={(e) => setType(e.target.value)} className="form-select" required>
+            <select 
+            value={type} 
+            onChange={(e) => setType(e.target.value)} 
+            className="form-select" 
+            required
+            >
               <option value="Edificación">Edificación</option>
                <option value="Urbanismo">Urbanismo</option>
             </select>
@@ -123,18 +121,21 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
             </select>
           </div>
 
-          {/* Presupuesto */}
-          <div className="form-group">
-            <label className="form-label"> <DollarSign size={16} /> Presupuesto
-            </label>
-            <input
-              type="number"
-              placeholder="Presupuesto (€)"
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="form-input"
-            />
-          </div>
+{/* Presupuesto Estilo Profesional */}
+<div className="form-group">
+  <label className="form-label">
+    <Euro size={16} /> Presupuesto
+  </label>
+  <div className="budget-input-wrapper">
+    <input
+      type="text"
+      placeholder="0,00"
+      value={budget} // Aquí budget puede ser un string inicialmente
+      onChange={(e) => {setBudget(e.target.value);}} // Permite que el usuario escriba libremente
+      className="form-input budget-field"
+    />
+  </div>
+</div>
 
           {/* Fecha de Inicio */}
           <div className="form-group">
@@ -186,7 +187,11 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
             onChange={(e) => setDescription(e.target.value)}
             className="form-textarea"
           />
+        {/* Imagen eliminada */}
         </div>
+        </div>
+
+        </fieldset>
 
         <div className="form-actions">
           <button type="submit" className="custom-btn btn-verde"> {selectedProject ? "Actualizar Proyecto" : "Crear Proyecto"}</button>
@@ -196,9 +201,7 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
             style="gris"
           />
         </div>
-        </div>
       </form>
-    </>
   );
 }
 
