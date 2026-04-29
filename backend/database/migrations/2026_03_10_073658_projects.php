@@ -22,7 +22,6 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->string('address')->nullable();
             $table->text('description')->nullable();
-            // Columna image eliminada
             $table->timestamps();
         });
     }

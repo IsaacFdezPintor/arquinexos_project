@@ -1,77 +1,67 @@
 <?php
 
-/**
- * @OA\Info(
- *     version="1.0.0",
- *     title="Arquinexos API",
- *     description="API REST para la gestión de proyectos y tareas de arquitectura",
- *     contact={
- *         "name": "Isaac Fernández Pintor",
- *         "email": "contact@arquinexos.local"
- *     },
- *     license={
- *         "name": "MIT"
- *     }
- * )
- */
-
-/**
- * @OA\Server(
- *     url="http://localhost:8000/api",
- *     description="Servidor de desarrollo"
- * )
- */
-
-/**
- * @OA\SecurityScheme(
- *     type="http",
- *     name="sanctum",
- *     in="header",
- *     scheme="bearer",
- *     bearerFormat="JWT",
- *     securityScheme="sanctum",
- *     description="Token de autenticación Laravel Sanctum"
- * )
- */
-
 use Illuminate\Support\Facades\Route;
-// Aquí llamamos a los "Controladores" (los que ejecutan las órdenes)
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TaskUserController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 
-// --- RUTAS PÚBLICAS (Cualquiera puede entrar) ---
-// Para registrarse y para entrar (Login)
+/**
+ * Definición de Rutas de la API - Sistema Arquinexos
+ * * Este archivo define los puntos de entrada (endpoints) para la comunicación
+ * entre el frontend y el backend.
+ */
+
+// =====================================================================
+// 1. RUTAS PÚBLICAS (Sin Autenticación)
+// =====================================================================
+
+// Registro de nuevos usuarios y obtención de Token inicial (Login)
 Route::post('auth/register', [AuthController::class, 'register']);
 Route::post('auth/login', [AuthController::class, 'login']);
 
-// --- RUTAS PROTEGIDAS (Solo si tienes la "llave" o Token) ---
-        Route::middleware('auth:sanctum')->group(function () {
+// =====================================================================
+// 2. RUTAS PROTEGIDAS (Requieren Token Sanctum)
+// =====================================================================
+
+Route::middleware('auth:sanctum')->group(function () {
     
-    // Saber quién soy yo ahora mismo y cerrar sesión
-    Route::get('auth/me', [AuthController::class, 'me']);
+    /**
+     * Gestión de Sesión y Perfil
+     * * Permite al cliente consultar sus propios datos o invalidar el token actual.
+     */
     Route::post('auth/logout', [AuthController::class, 'logout']);
     
-    // Ver a todos los empleados de mi equipo (Normalmente solo el Jefe)
+    /**
+     * Gestión de Usuarios y Equipo
+     * * 'team': Recupera la lista de trabajadores subordinados (Lógica exclusiva de Jefe).
+     */
     Route::get('users/team', [UserController::class, 'team']);
     
-    // Ver solo MIS tareas (Si soy trabajador)
+    /**
+     * Gestión Específica de Tareas
+     * * 'my-tasks': Filtra tareas asignadas directamente al usuario autenticado.
+     * * 'getByProject': Lista las tareas pertenecientes a un proyecto ID específico.
+     */
     Route::get('tasks/my-tasks', [TaskController::class, 'myTasks']);
-    
-    // Tareas de un proyecto específico
     Route::get('projects/{project}/tasks', [TaskController::class, 'getByProject']);
     
-    // Estas son "Súper Rutas" (apiResource). 
-    // Laravel crea automáticamente 5 rutas: Ver todos, Crear uno, Ver uno solo, Editar y Borrar.
-    Route::apiResource('projects', ProjectController::class);       // Gestión de proyectos
-    Route::apiResource('tasks', TaskController::class);             // Gestión de tareas
-    Route::apiResource('users', UserController::class);             // Gestión de usuarios
+    /**
+     * Controladores de Recurso (CRUD Automático)
+     * * Generan las rutas estándar: index, store, show, update, destroy.
+     */
+    Route::apiResource('projects', ProjectController::class);
+    Route::apiResource('tasks', TaskController::class);
+    Route::apiResource('users', UserController::class);
     
-    // Rutas para gestionar usuarios en tareas (Relación N:M)
-    Route::get('tasks/{task}/users', [TaskUserController::class, 'index']);           // Ver usuarios de una tarea
-    Route::post('tasks/{task}/users', [TaskUserController::class, 'store']);          // Asignar usuario a tarea
-    Route::put('tasks/{task}/users/{user}', [TaskUserController::class, 'update']);   // Actualizar rol del usuario
-    Route::delete('tasks/{task}/users/{user}', [TaskUserController::class, 'destroy']); // Desasignar usuario
+    /**
+     * Gestión de Relaciones Task-User 
+     * * Define los endpoints para la asignación y desasignación de personal a tareas.
+     * * Permite el control granular de quién trabaja en qué tarea específica.
+     */
+    Route::get('tasks/{task}/users', [TaskUserController::class, 'index']);      
+    Route::post('tasks/{task}/users', [TaskUserController::class, 'store']);        
+    Route::put('tasks/{task}/users/{user}', [TaskUserController::class, 'update']);   
+    Route::delete('tasks/{task}/users/{user}', [TaskUserController::class, 'destroy']); 
 });

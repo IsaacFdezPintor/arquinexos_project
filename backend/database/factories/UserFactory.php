@@ -7,39 +7,39 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * Factoría UserFactory - Generación de Usuarios de Prueba
+ * * Esta clase se encarga de crear registros para la tabla de usuarios.
  */
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * Almacena la contraseña cifrada para ser reutilizada por la factoría.
+
+     * * @var string|null
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
+     * * Crea un perfil de usuario completo y listo para iniciar sesión
+     * * @return array<string, mixed> Atributos del usuario para la base de datos.
      */
     public function definition(): array
     {
         return [
+            // Genera un nombre completo aleatorio
             'name' => fake()->name(),
+            
+            // Genera un correo único y seguro para pruebas
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            
+            // Asigna la contraseña 'password' cifrada (la genera una sola vez)
             'password' => static::$password ??= Hash::make('password'),
+            
+            // Establece el rol de trabajador como valor predeterminado
             'role' => 'worker',
+            
+            // Genera una cadena aleatoria para la funcionalidad de "recordar sesión"
             'remember_token' => Str::random(10),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

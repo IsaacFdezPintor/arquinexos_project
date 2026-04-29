@@ -13,27 +13,87 @@ import TaskPage from "./pages/TaskPage";
 import TeamPage from "./pages/TeamPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-export default function App() {
+/**
+ * Componente Principal - App
+ * 
+ * Define la estructura de enrutamiento de la aplicación.
+ * Organiza todas las rutas públicas y protegidas.
+ * 
+ * Estructura de rutas:
+ * - Públicas: Home, Login, Register
+ * - Protegidas: Proyectos, Tareas, Equipo
+ * - Captura: 404 Not Found
+ * 
+ * @returns {JSX.Element} Componente raíz con todas las rutas
+ */
+export default function App(): JSX.Element {
   return (
     <Routes>
+      {/* Layout principal que envolverá todas las rutas */}
       <Route element={<AppLayout />}>
 
-        {/* ---- RUTAS PÚBLICAS ---- */}
-        <Route path="/" element={<HomePage />} /> 
+        {/* ---- RUTAS PÚBLICAS (sin autenticación requerida) ---- */}
+        
+        {/* Página de inicio */}
+        <Route path="/" element={<HomePage />} />
+        
+        {/* Página de inicio de sesión */}
         <Route path="/login" element={<LoginPage />} />
+        
+        {/* Página de registro */}
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* ---- RUTAS PROTEGIDAS ---- */}
-        <Route path="/projects" element={<ProtectedRoute> <ProjectsPage />  </ProtectedRoute>} />
-        <Route path="/tasks" element={<ProtectedRoute> <TaskPage /> </ProtectedRoute>} />
-        <Route path="/projects/new" element={ <ProtectedRoute > <ProjectFormPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id" element={ <ProtectedRoute> <SessionDetailPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/edit" element={<ProtectedRoute > <ProjectFormPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/tasks/new" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
-        <Route path="/projects/:id/tasks/:taskId/edit" element={<ProtectedRoute > <TaskFormPage /> </ProtectedRoute>} />
-        <Route path="/team" element={<ProtectedRoute> <TeamPage /> </ProtectedRoute>} />
+        {/* ---- RUTAS PROTEGIDAS (requieren autenticación) ---- */}
+        
+        {/* Lista de todos los proyectos */}
+        <Route 
+          path="/projects" 
+          element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} 
+        />
+        
+        {/* Lista de todas las tareas */}
+        <Route 
+          path="/tasks" 
+          element={<ProtectedRoute><TaskPage /></ProtectedRoute>} 
+        />
+        
+        {/* Crear nuevo proyecto */}
+        <Route 
+          path="/projects/new" 
+          element={<ProtectedRoute><ProjectFormPage /></ProtectedRoute>} 
+        />
+        
+        {/* Ver detalles de un proyecto específico */}
+        <Route 
+          path="/projects/:id" 
+          element={<ProtectedRoute><SessionDetailPage /></ProtectedRoute>} 
+        />
+        
+        {/* Editar un proyecto existente */}
+        <Route 
+          path="/projects/:id/edit" 
+          element={<ProtectedRoute><ProjectFormPage /></ProtectedRoute>} 
+        />
+        
+        {/* Crear nueva tarea para un proyecto */}
+        <Route 
+          path="/projects/:id/tasks/new" 
+          element={<ProtectedRoute><TaskFormPage /></ProtectedRoute>} 
+        />
+        
+        {/* Editar una tarea existente */}
+        <Route 
+          path="/projects/:id/tasks/:taskId/edit" 
+          element={<ProtectedRoute><TaskFormPage /></ProtectedRoute>} 
+        />
+        
+        {/* Ver equipo de usuarios */}
+        <Route 
+          path="/team" 
+          element={<ProtectedRoute><TeamPage /></ProtectedRoute>} 
+        />
 
-        {/* ---- RUTA 404 ---- */}
+        {/* ---- RUTA 404 (página no encontrada) ---- */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('role', ['worker', 'boss'])->default('worker'); // Rol del usuario en la tarea
             $table->timestamps();
             $table->unique(['task_id', 'user_id']); // Una persona solo puede asignarse a una tarea una sola vez
         });

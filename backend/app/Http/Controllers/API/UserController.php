@@ -7,43 +7,43 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * Controlador UserController - Gestión de Usuarios 
+ * * Este controlador centraliza la administración de los usuarios del sistema.
+ * Permite realizar operaciones CRUD y gestionar la visualización del equipo
+ * de trabajo para los usuarios con privilegios administrativos.
+ */
 class UserController extends Controller
 {
+    /**
+     * Obtiene el listado global de usuarios.
+     * * Permite devolver la colección completa o paginada según los parámetros
+     * de la URL.
+     * * @param Request $request Petición que puede contener:
+     * * @return \Illuminate\Http\JsonResponse Lista de usuarios en formato JSON.
+     */
     public function index(Request $request)
     {
+        // Verificar si se solicita el listado total sin límites de página
         if ($request->has('no_paginate')) {
             return response()->json(User::all(), 200);
         }
+        
+        // Devuelve el listado con paginación estándar de Laravel (15 por página)
         return response()->json(User::paginate(15), 200);
     }
 
-    public function team(Request $request)
-    {
-        $user = $request->user();
-        
-        \Log::info(' Petición de equipo', [
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'user_role' => $user->role,
-            'is_jefe' => $user->isJefe()
-        ]);
-        
-        if (!$user->isJefe()) {
-            \Log::warning('Usuario sin permisos para ver equipo', ['user_id' => $user->id]);
-            return response()->json(['error' => 'No tienes permisos para ver el equipo'], 403);
-        }
-
-        $team = User::where('role', 'worker')
-            ->with('tasks')
-            ->get();
-
-        \Log::info('Equipo obtenido', ['count' => $team->count()]);
-
-        return response()->json($team, 200);
-    }
-
+  
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     * * Aplica reglas de validación, cifra la contraseña mediante Hash
+     * y asigna un rol por defecto si no se especifica.
+     * * @param Request $request Petición con datos: name, email, password y role.
+     * * @return \Illuminate\Http\JsonResponse Datos del usuario creado con código 201.
+     */
     public function store(Request $request)
     {
+        // Validar integridad y unicidad de los datos de entrada
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -51,31 +51,29 @@ class UserController extends Controller
             'role' => 'nullable|in:boss,worker',
         ]);
 
+        // Encriptar la contraseña antes de guardar
         $validated['password'] = Hash::make($validated['password']);
+        
+        // Establecer rol por defecto 'worker' si no se provee uno
         $validated['role'] = $validated['role'] ?? 'worker';
+        
+        // Persistir el nuevo usuario
         $user = User::create($validated);
+        
         return response()->json($user, 201);
     }
-
-    public function show(User $user)
-    {
-        return response()->json($user->load(['tasks', 'assignedTasks']), 200);
-    }
-
-    public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'email|unique:users,email,' . $user->id,
-        ]);
-
-        $user->update($validated);
-        return response()->json($user, 200);
-    }
-
+    
+    /**
+     * Elimina a un usuario del sistema.
+     * * Realiza el borrado del registro en la tabla users.
+     * * @param User $user Instancia del usuario a eliminar.
+     * * @return \Illuminate\Http\JsonResponse Mensaje de confirmación del borrado.
+     */
     public function destroy(User $user)
     {
+        // Proceder con la eliminación definitiva
         $user->delete();
+        
         return response()->json(['message' => 'User deleted'], 200);
     }
 }
