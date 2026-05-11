@@ -160,8 +160,7 @@ class TaskController extends Controller
         // Validación completa para el Jefe
         $validated = $request->validate([
             'project_id' => ['required', 'exists:projects,id'],
-            'user_ids' => ['nullable', 'array'],
-            'user_ids.*' => ['exists:users,id'],
+           <
             'name' => ['required', 'string', 'max:255'],
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { userService } from "../services/userService";
 import type { User } from "../types/Auth";
-import { Users, Mail, Shield, Calendar, Link, Plus } from "lucide-react";
+import { Users, Mail, Shield, Calendar, Plus } from "lucide-react";
 import Button from "../components/Button/Button";
 import ConfirmDelete from "../components/ConfirmDelete/ConfirmDelete";
 import { ToastContainer } from "../components/Toast/Toast";

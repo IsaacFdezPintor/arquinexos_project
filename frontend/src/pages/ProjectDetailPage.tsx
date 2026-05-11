@@ -10,20 +10,35 @@ import { useToast } from "../components/Toast/useToast";
 import { useAuth } from "../auth/authContext";
 import { User, Folder, Calendar, MapPin, DollarSign, FileText, ArrowLeft, Edit2, Plus, CheckCircle,  } from "lucide-react";
 
+/**
+ * Vista de Detalle del Proyecto.
+ * 
+ */
 function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  /** Determina si el usuario actual tiene permisos de administrador */
   const canManageTasksAndProject = user?.role === "boss";
+  
   const [project, setProject] = useState<Project | null>(null);
   const { toasts, addToast, removeToast } = useToast();
-    const [showTeamTasks, setShowTeamTasks] = useState<boolean>(false);
+  
+  /** Estado para alternar entre ver tareas personales o todas las tareas del equipo */
+  const [showTeamTasks, setShowTeamTasks] = useState<boolean>(false);
 
-
-  const handleTaskEdit = (taskId: number) => {
-    navigate(`/projects/${id}/tasks/${taskId}/edit`);
+  /**
+   * Redirige al formulario de edición de una tarea.
+   * @param {Task} task - Objeto de la tarea a editar.
+   */
+  const handleTaskEdit = (task: any) => {
+    navigate(`/projects/${id}/tasks/${task.id}/edit`);
   };
 
+  /**
+   * Efecto para cargar los datos del proyecto al montar el componente.
+   */
   useEffect(() => {
     if (!id) return;
     ProjectService.get(Number(id))
@@ -31,17 +46,20 @@ function ProjectDetailPage() {
       .catch(() => addToast("Proyecto no encontrado", "error"))
   }, [id]);
 
+  /** Renderizado de estado de error si el proyecto no existe o falló la carga */
   if (!project) {
     return (
       <div className="session-detail session-detail--empty">
         <h2>Proyecto no encontrado</h2>
-        <Link to="/projects">
-          <Button text={<><ArrowLeft size={16} /> Volver</>} onClick={() => {}} style="gris" />
-        </Link>
+          <Button text={<><ArrowLeft size={16} /> Volver</>} onClick={() => navigate("/projects")} style="gris" />
       </div>
     );
   }
 
+  /**
+   * Formatea fechas ISO a un formato local legible.
+   * @param {string} iso - Fecha en formato ISO.
+   */
   const formatDate = (iso: string) => {
     try {
       return new Date(iso).toLocaleDateString("es-ES", {
@@ -50,11 +68,15 @@ function ProjectDetailPage() {
     } catch { return iso; }
   };
 
+  /**
+   * Formatea valores numéricos a moneda EUR.
+   * @param {number} price - Cantidad numérica.
+   */
   const formatPrice = (price: number) => {
     return price.toLocaleString("es-ES", { style: "currency", currency: "EUR" });
   };
 
-  // URL de la API de Google Maps
+  /** USO DE API Externa */
   const googleMapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(project.address || "")}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
 
   return (
@@ -110,7 +132,7 @@ function ProjectDetailPage() {
             </div>
           </div>
 
-               {project.address && (
+          {project.address && (
             <div className="info-card">
               <div className="info-card__icon"><MapPin size={20} /></div>
               <div className="info-card__content">
@@ -120,12 +142,12 @@ function ProjectDetailPage() {
             </div>
           )}
 
-        {project.address && (
+          {project.address && (
             <div className="info-card" 
               style={{ 
-                gridColumn: 'span 2', // Esto hace que el mapa sea el doble de ancho que los otros
+                gridColumn: 'span 2', 
                 height: 'auto', 
-                minHeight: '300px', // Aumentamos la altura para que sea más rectangular
+                minHeight: '300px', 
                 padding: '0', 
                 overflow: 'hidden',
                 display: 'flex'
@@ -141,7 +163,6 @@ function ProjectDetailPage() {
               ></iframe>
             </div>
           )}
-     
         </div>
 
         {project.description && (
@@ -157,30 +178,35 @@ function ProjectDetailPage() {
 
       <div className="session-detail__header">
         <div className="session-detail__title-section">
-          <h1 className="session-detail__title"><CheckCircle size={28} style={{ color: "var(--color-primary)" }} /> Tareas</h1>
+          <h1 className="session-detail__title">
+            <CheckCircle size={28} style={{ color: "var(--color-primary)" }} /> Tareas
+          </h1>
         </div>
+        
         {canManageTasksAndProject && (
-          <Button 
-            text={<><Plus size={16} /> Añadir Tarea</>} 
-            onClick={() => navigate(`/projects/${project.id}/tasks/new`)}
-            style="verde" 
-          />
+          <>
+            <Button 
+              text={<><Plus size={16} /> Añadir Tarea</>} 
+              onClick={() => navigate(`/projects/${project.id}/tasks/new`)}
+              style="verde" 
+            />
+            <Button
+              text={<><Folder size={16} /> {showTeamTasks ? "Ver mis tareas" : "Ver tareas del equipo"}</>}
+              onClick={() => setShowTeamTasks(!showTeamTasks)}
+              style="gris"
+            />
+          </>
         )}
-
-        {canManageTasksAndProject && (
-          <Button
-            text={<><Folder size={16} /> {showTeamTasks ? "Ver mis tareas" : "Ver tareas del equipo"}</>}
-            onClick={() => setShowTeamTasks(!showTeamTasks)}
-            style="gris"
-          />
-        )}
-
-
       </div>
 
       <div className="session-detail__tasks">
-        <TaskList projectId={project.id} userId={user!=null ? user.id : undefined} onTaskEdit={handleTaskEdit}           showAllTeamTasks={showTeamTasks}
-/>
+        <TaskList 
+          projectId={project.id} 
+          userId={user!=null ? user.id : undefined} 
+          canManage={canManageTasksAndProject}
+          onTaskEdit={handleTaskEdit}           
+          showAllTeamTasks={showTeamTasks}
+        />
       </div>
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />

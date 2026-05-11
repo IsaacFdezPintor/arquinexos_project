@@ -1,3 +1,5 @@
+import type { Project } from './Project';
+
 export type TaskPriority = "low" | "medium" | "high" | "urgent" | "completed";
 
 export interface TaskUser {
@@ -6,11 +8,6 @@ export interface TaskUser {
   email: string;
     created_at?: string;
     updated_at?: string;
-}
-
-export interface Project {
-  id: number;
-  name: string;
 }
 
 export interface Task {

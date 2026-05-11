@@ -24,9 +24,8 @@ import NotFoundPage from "./pages/NotFoundPage";
  * - Protegidas: Proyectos, Tareas, Equipo
  * - Captura: 404 Not Found
  * 
- * @returns {JSX.Element} Componente raíz con todas las rutas
  */
-export default function App(): JSX.Element {
+export default function App(){
   return (
     <Routes>
       {/* Layout principal que envolverá todas las rutas */}

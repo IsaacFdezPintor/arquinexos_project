@@ -34,8 +34,8 @@ class ProjectController extends Controller
             return response()->json(Project::all(), 200);
         }
         
-        // Retornar proyectos paginados (15 por página por defecto)
-        return response()->json(Project::paginate(15), 200);
+        // Retornar proyectos paginados (4 por página por defecto)
+        return response()->json(Project::paginate(4), 200);
     }
 
     /**

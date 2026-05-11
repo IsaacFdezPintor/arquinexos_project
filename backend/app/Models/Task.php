@@ -75,7 +75,6 @@ class Task extends Model
      * en múltiples tareas. La tabla 'task_users' es la tabla pivote.
      * 
      * Incluye información adicional:
-     * - 'role': Rol del usuario en esta tarea (developer, reviewer, etc)
      * - timestamps: Fechas de creación y última actualización
      * 
      * @return BelongsToMany Colección de usuarios asignados a la tarea
@@ -83,8 +82,8 @@ class Task extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'task_users')
-            ->withPivot('role')      // Incluye el rol de la tabla pivote
             ->withTimestamps();      // Incluye timestamps de auditoría
     }
+
 
 }

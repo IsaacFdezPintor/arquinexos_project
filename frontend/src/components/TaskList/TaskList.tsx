@@ -7,16 +7,29 @@ import { Trash2, Edit2, User, Calendar, Inbox, AlertCircle, MessageSquare, X, In
 import Button from "../Button/Button";
 import "./TaskList.css";
 
+/**
+ * Propiedades para el componente TaskList.
+ */
 type TaskListProps = {
+  /** ID opcional para filtrar tareas de un proyecto específico. */
   projectId?: number;
+  /** ID opcional para filtrar tareas asignadas a un usuario concreto. */
   userId?: number;
+  /** Filtro de prioridad . Si está vacío, oculta las completadas. */
   priority?: string;
+  /** Callback ejecutado tras eliminar una tarea con éxito. */
   onTaskDeleted?: () => void;
-  onTaskEdit?: (taskId: number) => void;
+  /** Callback para abrir el formulario de edición de una tarea. */
+  onTaskEdit?: (task: Task) => void;
+  /** Define si el usuario actual tiene permisos para editar o borrar. */
   canManage?: boolean;
+  /** Si es true, ignora el filtro de userId y muestra todas las del equipo. */
   showAllTeamTasks?: boolean;
 };
 
+/**
+ * Mapeo de identificadores de prioridad a sus nombres.
+ */
 const PRIORITY_MAP = {
   low: "Baja",
   medium: "Media",
@@ -25,21 +38,50 @@ const PRIORITY_MAP = {
   completed: "Completado"
 } as const;
 
+/**
+ * Helper para obtener la etiqueta de prioridad formateada.
+ * @param {string} priority - Valor técnico de la prioridad.
+ * @returns {string} Etiqueta para mostrar en la interfaz.
+ */
 const getPriorityLabel = (priority: string): string => {
   return PRIORITY_MAP[priority as keyof typeof PRIORITY_MAP] || priority;
 };
 
-export default function TaskList({ projectId, userId, priority = "", onTaskDeleted, onTaskEdit, canManage = false, showAllTeamTasks = false }: TaskListProps) {
+/**
+ * Componente que renderiza una lista de tareas con capacidades de filtrado.
+ *  
+ * @param {TaskListProps} props - Propiedades del componente.
+ * @returns {JSX.Element} Lista de tareas o estado vacío.
+ */
+export default function TaskList({ 
+  projectId, 
+  userId, 
+  priority = "", 
+  onTaskDeleted, 
+  onTaskEdit, 
+  canManage = false, 
+  showAllTeamTasks = false 
+}: TaskListProps) {
+  
   const navigate = useNavigate();
   const { addToast } = useToast();
+  
+  // --- Estados locales ---
   const [tasks, setTasks] = useState<Task[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
+  /**
+   * Efecto que recarga las tareas cada vez que cambian los filtros principales.
+   */
   useEffect(() => {
     loadTasks();
   }, [projectId, userId, priority, showAllTeamTasks]);
 
+  /**
+   * Obtiene las tareas del servicio y aplica la lógica de filtrado en cliente.
+   * @returns {Promise<void>}
+   */
   const loadTasks = async () => {
     setErrorMessage(null);
     try {
@@ -47,15 +89,16 @@ export default function TaskList({ projectId, userId, priority = "", onTaskDelet
         ? await taskService.getByProject(projectId)
         : await taskService.getAll();
 
+      // Filtro por Usuario
       let filtered = (userId && !showAllTeamTasks)
         ? data.filter((task) => task.users?.some((u: any) => Number(u.id) === Number(userId)))
         : data;
 
-      // Si no hay filtro de prioridad, mostrar todas MENOS las completadas
+      // Lógica de Prioridad:
+      // Si no hay filtro, ocultamos las completadas por defecto.
       if (priority === "") {
         filtered = filtered.filter((task) => task.priority !== "completed");
       } else if (priority && priority !== "") {
-        // Si hay filtro de prioridad específico, aplicarlo
         filtered = filtered.filter((task) => task.priority === priority);
       }
 
@@ -66,18 +109,20 @@ export default function TaskList({ projectId, userId, priority = "", onTaskDelet
     } 
   };
 
+  /**
+   * Marca una tarea como completada en el backend y actualiza la lista local.
+   * @param {number | undefined} taskId - ID de la tarea a completar.
+   */
   const handleComplete = async (taskId: number | undefined) => {
     if (!taskId) return;
     try {
       const taskToUpdate = tasks.find(t => t.id === taskId);
       if (!taskToUpdate) return;
       
-      // Cambiar prioridad a "completed"
       const updatedTask = { ...taskToUpdate, priority: "completed" as const };
       await taskService.update(updatedTask);
       
-      // Si estamos en la vista "Todos", filtrar la tarea completada
-      // Si estamos en otra vista (como "Completada"), mantenerla
+      // Si la vista actual excluye completadas, la quitamos de la lista
       if (priority === "") {
         setTasks(prev => prev.filter(t => t.id !== taskId));
       } else {
@@ -91,6 +136,10 @@ export default function TaskList({ projectId, userId, priority = "", onTaskDelet
     }
   };
 
+  /**
+   * Elimina una tarea definitivamente.
+   * @param {number | undefined} taskId - ID de la tarea a eliminar.
+   */
   const handleDelete = async (taskId: number | undefined) => {
     if (!taskId) return;
     try {
@@ -104,6 +153,7 @@ export default function TaskList({ projectId, userId, priority = "", onTaskDelet
     }
   };
 
+  // --- Renderizado de Estado Vacío ---
   if (tasks.length === 0) {
     return (
       <div className="task-list task-list--empty">
@@ -124,131 +174,122 @@ export default function TaskList({ projectId, userId, priority = "", onTaskDelet
         </div>
       )}
 
+      {/* Renderizado de la lista de tareas */}
       {tasks.map((task) => (
         <div key={task.id} className="task-item">
           <div className="task-item__content">
             <h4 className="task-item__name">{task.name}</h4>
             <div className="task-item__meta">
-              {(task.users?.length ?? 0) > 0 ? (
-                <span className="task-item__assigned">
-                  <User size={14} /> {task.users?.map(u => u.name).join(", ")}
-                </span>
-              ) : task.assigned_user_name && (
-                <span className="task-item__assigned"><User size={14} /> {task.assigned_user_name}</span>
-              )}
+              {/* Asignatarios */}
+              <span className="task-item__assigned">
+                <User size={14} /> {task.users?.map(u => u.name).join(", ") || task.assigned_user_name}
+              </span>
+              
+              {/* Metadatos secundarios */}
               {task.description && <span className="task-item__description"><MessageSquare size={14} /> {task.description}</span>}
               {task.start_date && <span className="task-item__date"><Calendar size={14} /> {new Date(task.start_date).toLocaleDateString("es-ES")}</span>}
-              {task.priority && <span className="task-item__priority"><AlertCircle size={14} /> {getPriorityLabel(task.priority)}</span>}
-              {task.project?.name && <span className="task-item__priority"><AlertCircle size={14} /> {task.project.name}</span>}
-
+              <span className="task-item__priority"><AlertCircle size={14} /> {getPriorityLabel(task.priority)}</span>
             </div>
           </div>
 
           <div className="task-item__actions">
             {canManage && onTaskEdit && (
-              <button className="task-item__action-btn" onClick={(e) => { e.stopPropagation(); onTaskEdit(task.id!); }} title="Editar">
+              <button className="task-item__action-btn" onClick={() => onTaskEdit(task)} title="Editar">
                 <Edit2 size={16} />
               </button>
             )}
             {canManage && task.priority === "completed" && (
-              <button className="task-item__action-btn" onClick={(e) => { e.stopPropagation(); handleDelete(task.id!); }} title="Eliminar">
+              <button className="task-item__action-btn" onClick={() => handleDelete(task.id!)} title="Eliminar">
                 <Trash2 size={16} />
               </button>
             )}
-            <button className="task-item__action-btn " onClick={(e) => { e.stopPropagation(); setSelectedTask(task); }} title="Información">
+            <button className="task-item__action-btn" onClick={() => setSelectedTask(task)} title="Información">
               <Info size={16} />
             </button>
           </div>
         </div>
       ))}
 
-     {selectedTask && (
-<div className="task-modal-overlay" onClick={() => setSelectedTask(null)}>
-<div className="task-modal" onClick={(e) => e.stopPropagation()}>
-<div className="task-modal__header">
-<h2 className="task-modal__title">{selectedTask.name}</h2>
-<button
-className="task-modal__close"
-onClick={() => setSelectedTask(null)}
-title="Cerrar"
->
-<X size={24} />
-</button>
-</div>
+      {/* --- Modal de Detalles --- */}
+      {selectedTask && (
+        <div className="task-modal-overlay" onClick={() => setSelectedTask(null)}>
+          <div className="task-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="task-modal__header">
+              <h2 className="task-modal__title">{selectedTask.name}</h2>
+              <button className="task-modal__close" onClick={() => setSelectedTask(null)}><X size={24} /></button>
+            </div>
 
-<div className="task-modal__content">
-{selectedTask.description && (
-<div className="task-modal__section">
-<h3 className="task-modal__section-title">Descripción</h3>
-<p className="task-modal__text">{selectedTask.description}</p>
-</div>
-)}
+            <div className="task-modal__content">
+              {/* Descripción */}
+              {selectedTask.description && (
+                <div className="task-modal__section">
+                  <h3 className="task-modal__section-title">Descripción</h3>
+                  <p className="task-modal__description">{selectedTask.description}</p>
+                </div>
+              )}
 
-<div className="task-modal__section">
-<h3 className="task-modal__section-title">Prioridad</h3>
-<span className="task-modal__priority">{getPriorityLabel(selectedTask.priority)}</span>
-</div>
+              {/* Prioridad */}
+              <div className="task-modal__section">
+                <h3 className="task-modal__section-title">Prioridad</h3>
+                <div className="task-modal__priority">
+                  <AlertCircle size={16} /> {getPriorityLabel(selectedTask.priority)}
+                </div>
+              </div>
 
-{selectedTask.users && selectedTask.users.length > 0 && (
-<div className="task-modal__section">
-<h3 className="task-modal__section-title">Asignado a</h3>
-<div className="task-modal__users">
-{selectedTask.users.map((user) => (
-<div key={user.id} className="task-modal__user">
-<User size={16} />
-<span>{user.name}</span>
-<span className="task-modal__user-email">{user.email}</span>
-</div>
-))}
-</div>
-</div>
-)}
+              {/* Fechas */}
+              <div className="task-modal__section">
+                <h3 className="task-modal__section-title">Fechas</h3>
+                <div className="task-modal__dates">
+                  {selectedTask.start_date && (
+                    <div className="task-modal__date-item">
+                      <span className="task-modal__date-label">Inicio:</span>
+                      <span>{new Date(selectedTask.start_date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</span>
+                    </div>
+                  )}
+                  {selectedTask.end_date && (
+                    <div className="task-modal__date-item">
+                      <span className="task-modal__date-label">Vencimiento:</span>
+                      <span>{new Date(selectedTask.end_date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-{selectedTask.start_date && (
-<div className="task-modal__section">
-<h3 className="task-modal__section-title">Fecha de inicio</h3>
-<p className="task-modal__text">
-<Calendar size={16} style={{ display: "inline", marginRight: "0.5rem" }} />
-{new Date(selectedTask.start_date).toLocaleDateString("es-ES")}
-</p>
-</div>
-)}
+              {/* Proyecto */}
+              {selectedTask.project && (
+                <div className="task-modal__section">
+                  <h3 className="task-modal__section-title">Proyecto</h3>
+                  <div className="task-modal__project">
+                    <span>{selectedTask.project.name}</span>
+                    {selectedTask.project.type && <span className="task-modal__type-badge">{selectedTask.project.type}</span>}
+                  </div>
+                </div>
+              )}
 
-{selectedTask.end_date && (
-<div className="task-modal__section">
-<h3 className="task-modal__section-title">Fecha de finalización</h3>
-<p className="task-modal__text">
-<Calendar size={16} style={{ display: "inline", marginRight: "0.5rem" }} />
-{new Date(selectedTask.end_date).toLocaleDateString("es-ES")}
-</p>
-</div>
-)}
+              {/* Asignado a */}
+              <div className="task-modal__section">
+                <h3 className="task-modal__section-title">Asignado a</h3>
+                <div className="task-modal__users">
+                  {selectedTask.users && selectedTask.users.length > 0 ? (
+                    selectedTask.users.map((user) => (
+                      <div key={user.id} className="task-modal__user">
+                        <User size={16} /> <span>{user.name}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="task-modal__no-users">Sin asignar</span>
+                  )}
+                </div>
+              </div>
+            </div>
 
-</div>
-
-<div className="task-modal__footer">
-<Button
-text="Ir al proyecto"
-style="gris"
-onClick={() => {
-if (selectedTask?.project) {
-navigate(`/projects/${selectedTask.project.id}`);
-setSelectedTask(null);
-}
-}}
-/>
-<Button
-text="Completar tarea"
-style="verde"
-onClick={() => {
-handleComplete(selectedTask.id);
-setSelectedTask(null);
-}}
-/>
-</div>
-</div>
-</div>
-)}
-</div>
-);
+            <div className="task-modal__footer">
+              <Button text="Ir al proyecto" style="gris" onClick={() => navigate(`/projects/${selectedTask.project?.id}`)} />
+              <Button text="Completar tarea" style="verde" onClick={() => handleComplete(selectedTask.id)} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

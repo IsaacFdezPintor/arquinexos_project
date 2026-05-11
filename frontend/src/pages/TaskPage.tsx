@@ -1,15 +1,22 @@
 import { useState } from "react"; // 1. Importar useState
 import { useAuth } from "../auth/authContext";
+import { useNavigate } from "react-router-dom";
 import { ClipboardList, FolderKanban, AlertCircle, Zap, Ban ,CheckCircle} from "lucide-react";
 import TaskList from "../components/TaskList/TaskList";
+import { taskService } from "../services/taskService";
 
 function TaskPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [priorityFilter, setPriorityFilter] = useState<string>("");
   const [showTeamTasks, setShowTeamTasks] = useState<boolean>(false);
   
 
   if (!user) return null;
+
+  const handleTaskEdit = (task: any) => {
+    navigate(`/projects/${task.project?.id}/tasks/${task.id}/edit`);
+  };
 
   return (
     <div className="projects-page">
@@ -109,6 +116,7 @@ function TaskPage() {
           canManage={user.role === "boss"} 
           priority={priorityFilter}
           showAllTeamTasks={showTeamTasks}
+          onTaskEdit={handleTaskEdit}
         />
       </div>
     </div>

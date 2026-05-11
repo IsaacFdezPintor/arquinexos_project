@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 import { authStorage } from "../auth/authStorage";
 import type { AuthSession } from "../types/Auth";
 
@@ -19,9 +19,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
  * 
  * @type {AxiosInstance}
  */
-export const http: AxiosInstance = axios.create({
-    baseURL: API_BASE_URL
-});
+export const http = axios.create( {baseURL: API_BASE_URL});
+
 
 /**
  * Interceptor de peticiones.

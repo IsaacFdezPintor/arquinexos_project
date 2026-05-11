@@ -67,15 +67,11 @@ export const ProjectService = {
    * const projects = await ProjectService.getAll();
    * console.log(projects.length); // Número de proyectos
    */
-  getAll(): Promise<Project[]> {
-    return http.get(API_URL).then((response) => {
-      // Manejo flexible de formato de respuesta paginada o directa
-      const projects = Array.isArray(response.data)
-        ? response.data
-        : response.data.data;
-      return projects || [];
-    });
-  },
+getAll(page: number = 1): Promise<any> { // Cambiamos a any para recibir la meta-información
+  return http.get(`${API_URL}?page=${page}`).then((response) => {
+    return response.data; // Devolvemos todo el objeto (data, current_page, last_page, etc.)
+  });
+},
 
   /**
    * Elimina un proyecto existente.
@@ -132,9 +128,7 @@ export const ProjectService = {
    */
   create(data: any): Promise<Project> {
     return http
-      .post<Project>(API_URL, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      .post<Project>(API_URL, data)
       .then((response) => response.data);
   },
 

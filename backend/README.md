@@ -8,8 +8,6 @@
 
 - [Descripción General](#descripción-general)
 - [Características](#características)
-- [Instalación](#instalación)
-- [Configuración](#configuración)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Base de Datos](#base-de-datos)
 - [Autenticación](#autenticación)
@@ -17,7 +15,7 @@
 - [Modelos y Relaciones](#modelos-y-relaciones)
 - [Ejecución](#ejecución)
 - [Testing](#testing)
-- [Documentación API](#documentación-api)
+- [Enumeraciones](#Enumeraciones)
 
 ---
 
@@ -114,10 +112,10 @@ backend/
 │   ├── Unit/
 │   └── Feature/
 │
-├── .env.example     
-├── artisan           
-├── composer.json        
-└── README.md              
+├── .env.example   
+├── artisan         
+├── composer.json      
+└── README.md            
 ```
 
 ---

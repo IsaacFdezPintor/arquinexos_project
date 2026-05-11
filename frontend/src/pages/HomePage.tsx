@@ -3,39 +3,56 @@ import { useAuth } from "../auth/authContext";
 import Button from "../components/Button/Button";
 import { CalendarDays, Link2, Users, BarChart3 } from "lucide-react";
 
+/**
+ * Presentación de la aplicación
+ * 
+ * @returns {JSX.Element} El renderizado de la página principal.
+ */
 export default function HomePage() {
 
-  //Verificar si el usuario está autenticado para mostrar opciones personalizadas
+  /** 
+   * Extraemos el objeto user para personalizar la llamada a la acción
+   * Si hay usuario, lo enviamos al dashboard; si no, al login.
+   */
   const { user } = useAuth();
-  // Redirigir a las paginas 
+  
+  /** Hook para la navegación programática entre rutas. */
   const navigate = useNavigate();
 
   return (
     <div className="home">
+        {/* Etiqueta superior informativa */}
         <div className="home__badge">Organizador de tareas</div>
+        
         <h1 className="home__title">
           Planifica tus proyectos con un{" "}
           <span className="home__highlight">organizador de tareas</span>
         </h1>
+        
         <p className="home__subtitle">
           Visualiza, organiza y haz seguimiento de todas tus tareas. Plazos, dependencias y estado en un
           solo lugar.
         </p>
 
+        {/* Sección de acciones principales (Hero Actions) */}
         <div className="home__actions">
-          {/* Mostrar botón de "Ver mis proyectos" si el usuario está autenticado, de lo contrario mostrar opciones de registro e inicio de sesión */}
           {user ? (
-            <Button text="Ver mis proyectos" onClick={() => navigate("/projects")} style="verde"/>
+            <Button 
+              text="Ver mis proyectos" 
+              onClick={() => navigate("/projects")} 
+              style="verde"
+            />
           ) : (
-            <>
-              <Button text="Iniciar sesión" onClick={() => navigate("/login")} style="gris" />
-            </>
+            <Button 
+              text="Iniciar sesión" 
+              onClick={() => navigate("/login")} 
+              style="gris" 
+            />
           )}
         </div>
 
-  
-  
-    <section className="features">
+      {/* Sección de beneficios o funcionalidades clave */}
+      <section className="features">
         <div className="feature-card">
           <CalendarDays className="feature-card__icon-svg" />
           <h3 className="feature-card__title">Vista tareas</h3>
@@ -43,13 +60,15 @@ export default function HomePage() {
             Visualiza tus tareas en dependencia de tu proyecto.
           </p>
         </div>
+
         <div className="feature-card">
           <Link2 className="feature-card__icon-svg" />
           <h3 className="feature-card__title">Prioridad</h3>
           <p className="feature-card__desc">
-            Asigna tus tareas mas urgentes.
+            Asigna tus tareas más urgentes.
           </p>
         </div>
+
         <div className="feature-card">
           <Users className="feature-card__icon-svg" />
           <h3 className="feature-card__title">Equipo</h3>
@@ -57,6 +76,7 @@ export default function HomePage() {
             Asigna tareas a miembros del equipo y controla el progreso individual.
           </p>
         </div>
+
         <div className="feature-card">
           <BarChart3 className="feature-card__icon-svg" />
           <h3 className="feature-card__title">Estados</h3>

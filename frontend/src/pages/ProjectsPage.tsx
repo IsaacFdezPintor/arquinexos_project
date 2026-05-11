@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ProjectService } from "../services/projectService";
 import type { Project } from "../types/Project";
 import ProjectList from "../components/ProjectList/ProjectList";
@@ -11,6 +11,10 @@ import { useToast } from "../components/Toast/useToast";
 import { useAuth } from "../auth/authContext";
 import { Plus, Briefcase, ClipboardList, ListChecks, Ban, FolderKanban } from "lucide-react";
 
+/**
+ * Vista principal de proyectos.
+ * Gestiona el listado, filtrado por estado, paginación y eliminación de proyectos.
+ */
 export default function ProjectsPage() {
   const { user } = useAuth();
   const canManageProjects = user?.role === "boss";
@@ -22,46 +26,69 @@ export default function ProjectsPage() {
   const [deleteTarget, setDeleteTarget] = useState<Project | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const { toasts, addToast, removeToast } = useToast();
+  
+  // Estados para el control de la paginación de la API
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
-
-  // Cargar los proyectos al montar el componente
-  useEffect(() => { loadProjects();} , []);
-
-
-//Peticion a Laravel para obtener los proyectos del usuario autenticado
-  const loadProjects = async () => {
-    setLoading(true); // Mostramos el loader mientras cargamos los proyectos,
+  /**
+   * Carga los proyectos desde el servicio llamando a la API de Laravel.
+   * @param {number} page - Número de página a cargar.
+   */
+  const loadProjects = async (page: number = 1) => {
+    setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulamos un retraso de 2 segundos para mostrar el loader
-      const data = await ProjectService.getAll(); // GET /projects → obtiene la lista de proyectos usamos await para esperara a que llegue todos lo datos
-      // El await hace que no Tu código intenta "comerse" el ticket del pedido, la aplicación se confunde y sale un error porque esperaba proyectos y recibió un papel que dice "llegaré pronto".
-      setProjects(data); // Guardamos los proyectos en el estado para mostrarlos 
+      // Simulamos un pequeño retraso 
+      await new Promise(resolve => setTimeout(resolve, 1000)); 
+      
+      const response = await ProjectService.getAll(page);
+      setProjects(response.data); 
+      setCurrentPage(response.current_page);
+      setLastPage(response.last_page);
     } catch {
       addToast("Error al cargar los proyectos", "error");
     } finally {
-      setLoading(false); // Falle o no se oculta el loader
+      setLoading(false);
     }
   };
 
-  // Seelciona el proyecto a eliminar y muestra el modal de confirmación
+  // Carga inicial al montar el componente
+  useEffect(() => { 
+    loadProjects();
+  }, []);
+
+  // Recarga cuando el usuario cambia de página
+  useEffect(() => {
+    loadProjects(currentPage);
+  }, [currentPage]);
+
+  /**
+   * Prepara un proyecto para ser eliminado abriendo el modal de confirmación.
+   */
   const handleDeleteClick = (project: Project) => {
     setDeleteTarget(project);
   };
 
-  // Selleciona al proyecto a editar y navega a la página de edición
+  /**
+   * Navega a la página de edición pasando el objeto del proyecto en el state.
+   */
   const handleEdit = (project: Project) => {
     navigate(`/projects/${project.id}/edit`, { state: { project } });
   };
 
+  /**
+   * Ejecuta la petición de borrado tras confirmar en el modal.
+   */
   const handleDeleteConfirm = async () => {
-    if (!deleteTarget) return
-    else{
+    if (!deleteTarget) return;
+    
     setDeletingId(deleteTarget.id);
-  }
+    
     try {
       await ProjectService.delete(deleteTarget.id);
+      // Filtramos localmente para actualizar la UI sin recargar todo
       setProjects((prev) => prev.filter((t) => t.id != deleteTarget.id));
-      addToast(`Proyecto «${deleteTarget.name}» eliminado`, "success");
+      addToast(`Proyecto «${deleteTarget.name}» eliminado correctamente`, "success");
       setDeleteTarget(null);
     } catch {
       addToast("Error al eliminar el proyecto", "error");
@@ -70,8 +97,9 @@ export default function ProjectsPage() {
     }
   };
 
-
-  // Filtrar proyectos según el estado seleccionado
+  /**
+   * Filtrado en el lado del cliente basado en el estado seleccionado en la navbar.
+   */
   const filteredProjects = statusFilter
     ? projects.filter((p) => p.status === statusFilter)
     : projects;
@@ -83,62 +111,62 @@ export default function ProjectsPage() {
           <Briefcase size={32} className="projects-page__icon" />
           <div>
             <h1>Mis Proyectos</h1>
-            <p className="projects-page__subtitle">{filteredProjects.length} proyecto{filteredProjects.length !== 1 ? 's' : ''}</p>
+            <p className="projects-page__subtitle">
+              {filteredProjects.length} proyecto{filteredProjects.length !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
+        
+        {/* Solo los jefes pueden crear proyectos */}
         {canManageProjects && (
-          <Link to="/projects/new">
-            <Button text={<><Plus size={16} /> Nuevo Proyecto</>} style="verde" />
-          </Link>
+            <Button text={<><Plus size={16} /> Nuevo Proyecto</>} onClick={() => navigate('/projects/new')} style="verde" />
         )}
       </div>
 
+      {/* Navbar de filtrado por estados */}
       <nav className="navbar__links">
-  {/* Botón: TODOS */}
-  <button
-    type="button"
-    className={`navbar__link ${statusFilter === "" ? "navbar__link--active" : ""}`}
-    onClick={() => setStatusFilter("")}
-  >
-    <FolderKanban size={16} /> Todos
-  </button>
+        <button
+          type="button"
+          className={`navbar__link ${statusFilter === "" ? "navbar__link--active" : ""}`}
+          onClick={() => setStatusFilter("")}
+        >
+          <FolderKanban size={16} /> Todos
+        </button>
 
-  {/* Botón: PENDIENTE */}
-  <button
-    type="button"
-    className={`navbar__link ${statusFilter === "pending" ? "navbar__link--active" : ""}`}
-    onClick={() => setStatusFilter("pending")}
-  >
-    <ClipboardList size={16} /> Pendiente
-  </button>
+        <button
+          type="button"
+          className={`navbar__link ${statusFilter === "pending" ? "navbar__link--active" : ""}`}
+          onClick={() => setStatusFilter("pending")}
+        >
+          <ClipboardList size={16} /> Pendiente
+        </button>
 
-  {/* Botón: EN PROCESO */}
-  <button
-    type="button"
-    className={`navbar__link ${statusFilter === "in_progress" ? "navbar__link--active" : ""}`}
-    onClick={() => setStatusFilter("in_progress")}
-  >
-    <ListChecks size={16} /> En Proceso
-  </button>
+        <button
+          type="button"
+          className={`navbar__link ${statusFilter === "in_progress" ? "navbar__link--active" : ""}`}
+          onClick={() => setStatusFilter("in_progress")}
+        >
+          <ListChecks size={16} /> En Proceso
+        </button>
 
-  {/* Botón: COMPLETADO */}
-  <button
-    type="button"
-    className={`navbar__link ${statusFilter === "completed" ? "navbar__link--active" : ""}`}
-    onClick={() => setStatusFilter("completed")}
-  >
-    <Briefcase size={16} /> Completado
-  </button>
+        <button
+          type="button"
+          className={`navbar__link ${statusFilter === "completed" ? "navbar__link--active" : ""}`}
+          onClick={() => setStatusFilter("completed")}
+        >
+          <Briefcase size={16} /> Completado
+        </button>
 
-  {/* Botón: CANCELADO */}
-  <button
-    type="button"
-    className={`navbar__link ${statusFilter === "cancelled" ? "navbar__link--active" : ""}`}
-    onClick={() => setStatusFilter("cancelled")}
-  >
-    <Ban size={16} /> Cancelado
-  </button>
-</nav>
+        <button
+          type="button"
+          className={`navbar__link ${statusFilter === "cancelled" ? "navbar__link--active" : ""}`}
+          onClick={() => setStatusFilter("cancelled")}
+        >
+          <Ban size={16} /> Cancelado
+        </button>
+      </nav>
+
+      {/* Renderizado condicional: Spinner o Lista */}
       {loading ? (
         <LoadingSpinner message="Cargando proyectos..." />
       ) : (
@@ -151,6 +179,7 @@ export default function ProjectsPage() {
         />
       )}
 
+      {/* Modal de confirmación de borrado */}
       {deleteTarget && (
         <div className="modal-overlay">
           <ConfirmDelete
@@ -161,8 +190,18 @@ export default function ProjectsPage() {
         </div>
       )}
 
+      {/* Controles de paginación inferiores */}
+      <div className="pagination-controls" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
+        <Button text="Anterior" onClick={() => setCurrentPage(prev => prev - 1)} style="gris" />
+
+        <span style={{ alignSelf: 'center' }}>
+          Página <strong>{currentPage}</strong> de {lastPage}
+        </span>
+
+        <Button text="Siguiente" onClick={() => setCurrentPage(prev => prev + 1)} style="gris" />
+      </div>
+
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 }
-
