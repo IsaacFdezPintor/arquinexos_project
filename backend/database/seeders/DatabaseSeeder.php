@@ -32,13 +32,12 @@ class DatabaseSeeder extends Seeder
         $worker1 = User::create(['name' => 'Laura García', 'email' => 'laura@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
         $worker2 = User::create(['name' => 'Miguel Torres', 'email' => 'miguel@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
         $worker3 = User::create(['name' => 'Ana Ruiz', 'email' => 'ana@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
-        $worker4 = User::create(['name' => 'Pedro Sánchez', 'email' => 'pedro@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
-        $worker5 = User::create(['name' => 'Elena Belmonte', 'email' => 'elena@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
-        $worker6 = User::create(['name' => 'Roberto Cano', 'email' => 'roberto@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
-        $manualWorkers = collect([$worker1, $worker2, $worker3, $worker4, $worker5, $worker6]);
+        $worker4 = User::create(['name' => 'Elena Belmonte', 'email' => 'elena@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
+        $worker5 = User::create(['name' => 'Roberto Cano', 'email' => 'roberto@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
+        $manualWorkers = collect([$worker1, $worker2, $worker3, $worker4, $worker5]);
 
         // Generación de 10 usuarios adicionales para simular una empresa más grande
-        $factoryWorkers = User::factory(10)->create(['role' => 'worker']);
+        $factoryWorkers = User::factory(3)->create(['role' => 'worker']);
 
         // Unificación de todo el personal en una sola colección para asignaciones dinámicas
         $allStaff = $manualWorkers->concat($factoryWorkers)->push($jefe);
@@ -52,7 +51,7 @@ $p1 = Project::create([
 $t1 = Task::create(['project_id' => $p1->id, 'name' => 'Levantamiento topográfico', 'priority' => 'high', 'start_date' => '2026-01-15', 'end_date' => '2026-01-22']); $t1->users()->attach([$worker1->id, $worker2->id]);
 $t2 = Task::create(['project_id' => $p1->id, 'name' => 'Cálculo estructural', 'priority' => 'high', 'start_date' => '2026-02-16', 'end_date' => '2026-03-05']); $t2->users()->attach($jefe->id);
 $t3 = Task::create(['project_id' => $p1->id, 'name' => 'Instalaciones fontanería', 'priority' => 'low', 'start_date' => '2026-04-01', 'end_date' => '2026-04-15']); $t3->users()->attach($worker5->id);
-$t4 = Task::create(['project_id' => $p1->id, 'name' => 'Cimentación', 'priority' => 'urgent', 'start_date' => '2026-01-25', 'end_date' => '2026-02-10']); $t4->users()->attach([$worker1->id, $worker6->id]);
+$t4 = Task::create(['project_id' => $p1->id, 'name' => 'Cimentación', 'priority' => 'urgent', 'start_date' => '2026-01-25', 'end_date' => '2026-02-10']); $t4->users()->attach([$worker1->id]);
 $t5 = Task::create(['project_id' => $p1->id, 'name' => 'Levantamiento de muros', 'priority' => 'high', 'start_date' => '2026-02-15', 'end_date' => '2026-03-20']); $t5->users()->attach([$worker2->id, $worker4->id]);
 $t6 = Task::create(['project_id' => $p1->id, 'name' => 'Instalación eléctrica', 'priority' => 'medium', 'start_date' => '2026-03-25', 'end_date' => '2026-04-10']); $t6->users()->attach($worker3->id);
 $t7 = Task::create(['project_id' => $p1->id, 'name' => 'Cubierta y tejado', 'priority' => 'high', 'start_date' => '2026-04-20', 'end_date' => '2026-05-15']); $t7->users()->attach([$worker1->id, $worker5->id]);
@@ -69,26 +68,22 @@ $p2 = Project::create([
 $p2t1 = Task::create(['project_id' => $p2->id, 'name' => 'Diseño interior', 'priority' => 'high', 'start_date' => '2026-02-10', 'end_date' => '2026-02-28']); $p2t1->users()->attach([$worker3->id, $worker4->id, $jefe->id]);
 $p2t2 = Task::create(['project_id' => $p2->id, 'name' => 'Licencia de apertura', 'priority' => 'medium', 'start_date' => '2026-03-01', 'end_date' => '2026-03-20']); $p2t2->users()->attach($worker1->id);
 $p2t3 = Task::create(['project_id' => $p2->id, 'name' => 'Demolición de tabiques', 'priority' => 'urgent', 'start_date' => '2026-02-01', 'end_date' => '2026-02-08']); $p2t3->users()->attach([$worker2->id, $worker5->id]);
-$p2t4 = Task::create(['project_id' => $p2->id, 'name' => 'Instalación cocina profesional', 'priority' => 'high', 'start_date' => '2026-03-25', 'end_date' => '2026-04-10']); $p2t4->users()->attach([$worker4->id, $worker6->id]);
+$p2t4 = Task::create(['project_id' => $p2->id, 'name' => 'Instalación cocina profesional', 'priority' => 'high', 'start_date' => '2026-03-25', 'end_date' => '2026-04-10']); $p2t4->users()->attach([$worker4->id, $worker5->id]);
 $p2t5 = Task::create(['project_id' => $p2->id, 'name' => 'Pavimentos', 'priority' => 'medium', 'start_date' => '2026-03-15', 'end_date' => '2026-04-05']); $p2t5->users()->attach($worker1->id);
 $p2t6 = Task::create(['project_id' => $p2->id, 'name' => 'Revestimientos de paredes', 'priority' => 'medium', 'start_date' => '2026-04-08', 'end_date' => '2026-04-25']); $p2t6->users()->attach([$worker3->id, $worker5->id]);
-$p2t7 = Task::create(['project_id' => $p2->id, 'name' => 'Iluminación y electricidad', 'priority' => 'high', 'start_date' => '2026-04-01', 'end_date' => '2026-04-20']); $p2t7->users()->attach($worker2->id);
-$p2t8 = Task::create(['project_id' => $p2->id, 'name' => 'Montaje de mobiliario', 'priority' => 'medium', 'start_date' => '2026-04-26', 'end_date' => '2026-05-05']); $p2t8->users()->attach([$worker4->id, $worker1->id]);
-$p2t9 = Task::create(['project_id' => $p2->id, 'name' => 'Pruebas de seguridad', 'priority' => 'high', 'start_date' => '2026-05-06', 'end_date' => '2026-05-10']); $p2t9->users()->attach($jefe->id);
-$p2t10 = Task::create(['project_id' => $p2->id, 'name' => 'Apertura y entrega', 'priority' => 'urgent', 'start_date' => '2026-05-11', 'end_date' => '2026-05-15']); $p2t10->users()->attach($jefe->id);
-
+$p2t7 = Task::create(['project_id' => $p2->id, 'name' => 'Iluminación y electricidad', 'priority' => 'high', 'start_date' => '2026-04-20', 'end_date' => '2026-05-10']); $p2t7->users()->attach([$worker2->id, $worker4->id]);
 // PROYECTO 3: Urbanización
 $p3 = Project::create([
 'name' => 'Urbanización El Mirador', 'type' => 'urbanismo', 'client_name' => 'Ayuntamiento de Pozuelo',
 'status' => 'pending', 'budget' => 450000, 'address' => 'C. del Río, 123, 41001 Sevilla, España', 'start_date' => '2026-06-01', 'end_date' => '2027-02-28',
 ]);
-$p3t1 = Task::create(['project_id' => $p3->id, 'name' => 'Estudio de impacto ambiental', 'priority' => 'medium', 'start_date' => '2026-06-05', 'end_date' => '2026-07-10']); $p3t1->users()->attach([$worker2->id, $worker6->id]);
+$p3t1 = Task::create(['project_id' => $p3->id, 'name' => 'Estudio de impacto ambiental', 'priority' => 'medium', 'start_date' => '2026-06-05', 'end_date' => '2026-07-10']); $p3t1->users()->attach([$worker2->id, $worker5->id]);
 $p3t2 = Task::create(['project_id' => $p3->id, 'name' => 'Trazado de viales', 'priority' => 'high', 'start_date' => '2026-07-15', 'end_date' => '2026-08-30']); $p3t2->users()->attach($worker4->id);
 $p3t3 = Task::create(['project_id' => $p3->id, 'name' => 'Estudio de suelos', 'priority' => 'high', 'start_date' => '2026-06-01', 'end_date' => '2026-06-20']); $p3t3->users()->attach([$worker1->id, $worker5->id]);
 $p3t4 = Task::create(['project_id' => $p3->id, 'name' => 'Levantamiento catastral', 'priority' => 'medium', 'start_date' => '2026-06-10', 'end_date' => '2026-06-25']); $p3t4->users()->attach($worker3->id);
 $p3t5 = Task::create(['project_id' => $p3->id, 'name' => 'Estudio de viabilidad', 'priority' => 'high', 'start_date' => '2026-06-15', 'end_date' => '2026-07-05']); $p3t5->users()->attach($jefe->id);
 $p3t6 = Task::create(['project_id' => $p3->id, 'name' => 'Diseño de espacios verdes', 'priority' => 'medium', 'start_date' => '2026-07-20', 'end_date' => '2026-08-10']); $p3t6->users()->attach([$worker2->id, $worker4->id]);
-$p3t7 = Task::create(['project_id' => $p3->id, 'name' => 'Infraestructura de servicios', 'priority' => 'high', 'start_date' => '2026-08-15', 'end_date' => '2026-09-20']); $p3t7->users()->attach([$worker1->id, $worker6->id]);
+$p3t7 = Task::create(['project_id' => $p3->id, 'name' => 'Infraestructura de servicios', 'priority' => 'high', 'start_date' => '2026-08-15', 'end_date' => '2026-09-20']); $p3t7->users()->attach([$worker1->id, $worker2->id]);
 $p3t8 = Task::create(['project_id' => $p3->id, 'name' => 'Presupuesto y financiación', 'priority' => 'medium', 'start_date' => '2026-06-01', 'end_date' => '2026-07-15']); $p3t8->users()->attach($jefe->id);
 $p3t9 = Task::create(['project_id' => $p3->id, 'name' => 'Aprobaciones municipales', 'priority' => 'urgent', 'start_date' => '2026-08-01', 'end_date' => '2026-09-01']); $p3t9->users()->attach($jefe->id);
 $p3t10 = Task::create(['project_id' => $p3->id, 'name' => 'Adjudicación de obras', 'priority' => 'high', 'start_date' => '2026-09-05', 'end_date' => '2026-10-01']); $p3t10->users()->attach($jefe->id);
@@ -103,12 +98,10 @@ $p4t2 = Task::create(['project_id' => $p4->id, 'name' => 'Entrega de llaves', 'p
 $p4t3 = Task::create(['project_id' => $p4->id, 'name' => 'Diseño arquitectónico', 'priority' => 'high', 'start_date' => '2025-01-10', 'end_date' => '2025-02-28']); $p4t3->users()->attach($jefe->id);
 $p4t4 = Task::create(['project_id' => $p4->id, 'name' => 'Cimentación', 'priority' => 'urgent', 'start_date' => '2025-03-01', 'end_date' => '2025-04-01']); $p4t4->users()->attach([$worker1->id, $worker2->id, $worker5->id]);
 $p4t5 = Task::create(['project_id' => $p4->id, 'name' => 'Estructura metálica', 'priority' => 'high', 'start_date' => '2025-04-05', 'end_date' => '2025-05-15']); $p4t5->users()->attach([$worker2->id, $worker4->id]);
-$p4t6 = Task::create(['project_id' => $p4->id, 'name' => 'Cubiertas y cerramientos', 'priority' => 'high', 'start_date' => '2025-05-20', 'end_date' => '2025-06-20']); $p4t6->users()->attach([$worker1->id, $worker6->id]);
+$p4t6 = Task::create(['project_id' => $p4->id, 'name' => 'Cubiertas y cerramientos', 'priority' => 'high', 'start_date' => '2025-05-20', 'end_date' => '2025-06-20']); $p4t6->users()->attach([$worker1->id, $worker2->id]);
 $p4t7 = Task::create(['project_id' => $p4->id, 'name' => 'Instalaciones técnicas', 'priority' => 'high', 'start_date' => '2025-06-25', 'end_date' => '2025-07-30']); $p4t7->users()->attach([$worker3->id, $worker4->id]);
 $p4t8 = Task::create(['project_id' => $p4->id, 'name' => 'Acabados interiores', 'priority' => 'medium', 'start_date' => '2025-08-01', 'end_date' => '2025-09-15']); $p4t8->users()->attach([$worker1->id, $worker3->id]);
-$p4t9 = Task::create(['project_id' => $p4->id, 'name' => 'Instalación de butacas', 'priority' => 'medium', 'start_date' => '2025-09-20', 'end_date' => '2025-10-10']); $p4t9->users()->attach($worker5->id);
-$p4t10 = Task::create(['project_id' => $p4->id, 'name' => 'Pruebas de sistemas', 'priority' => 'high', 'start_date' => '2025-10-15', 'end_date' => '2025-11-10']); $p4t10->users()->attach($jefe->id);
-$p4t11 = Task::create(['project_id' => $p4->id, 'name' => 'Certificaciones finales', 'priority' => 'urgent', 'start_date' => '2025-11-15', 'end_date' => '2025-12-10']); $p4t11->users()->attach($jefe->id);
+
 
 // PROYECTO 5: Nave Industrial
 $p5 = Project::create([
@@ -117,32 +110,32 @@ $p5 = Project::create([
 ]);
 $p5t1 = Task::create(['project_id' => $p5->id, 'name' => 'Cimentación especial', 'priority' => 'high', 'start_date' => '2026-03-15', 'end_date' => '2026-04-10']); $p5t1->users()->attach([$worker2->id, $worker5->id]);
 $p5t2 = Task::create(['project_id' => $p5->id, 'name' => 'Diseño industrial', 'priority' => 'high', 'start_date' => '2026-03-10', 'end_date' => '2026-03-25']); $p5t2->users()->attach($jefe->id);
-$p5t3 = Task::create(['project_id' => $p5->id, 'name' => 'Estudio de cargas', 'priority' => 'urgent', 'start_date' => '2026-03-12', 'end_date' => '2026-03-20']); $p5t3->users()->attach([$worker1->id, $worker6->id]);
+$p5t3 = Task::create(['project_id' => $p5->id, 'name' => 'Estudio de cargas', 'priority' => 'urgent', 'start_date' => '2026-03-12', 'end_date' => '2026-03-20']); $p5t3->users()->attach([$worker1->id, $worker5->id]);
 $p5t4 = Task::create(['project_id' => $p5->id, 'name' => 'Estructura de acero', 'priority' => 'high', 'start_date' => '2026-04-15', 'end_date' => '2026-05-30']); $p5t4->users()->attach([$worker2->id, $worker4->id, $worker5->id]);
 $p5t5 = Task::create(['project_id' => $p5->id, 'name' => 'Cubierta industrial', 'priority' => 'high', 'start_date' => '2026-06-01', 'end_date' => '2026-06-25']); $p5t5->users()->attach([$worker1->id, $worker3->id]);
-$p5t6 = Task::create(['project_id' => $p5->id, 'name' => 'Puertas y accesos', 'priority' => 'medium', 'start_date' => '2026-06-28', 'end_date' => '2026-07-15']); $p5t6->users()->attach($worker6->id);
+$p5t6 = Task::create(['project_id' => $p5->id, 'name' => 'Puertas y accesos', 'priority' => 'medium', 'start_date' => '2026-06-28', 'end_date' => '2026-07-15']); $p5t6->users()->attach($worker3->id);
 $p5t7 = Task::create(['project_id' => $p5->id, 'name' => 'Sistema de climatización', 'priority' => 'high', 'start_date' => '2026-07-20', 'end_date' => '2026-08-20']); $p5t7->users()->attach([$worker4->id, $worker5->id]);
 $p5t8 = Task::create(['project_id' => $p5->id, 'name' => 'Instalación eléctrica', 'priority' => 'high', 'start_date' => '2026-07-25', 'end_date' => '2026-08-25']); $p5t8->users()->attach($worker2->id);
-$p5t9 = Task::create(['project_id' => $p5->id, 'name' => 'Red de tuberías', 'priority' => 'medium', 'start_date' => '2026-08-26', 'end_date' => '2026-09-15']); $p5t9->users()->attach([$worker3->id, $worker6->id]);
+$p5t9 = Task::create(['project_id' => $p5->id, 'name' => 'Red de tuberías', 'priority' => 'medium', 'start_date' => '2026-08-26', 'end_date' => '2026-09-15']); $p5t9->users()->attach([$worker3->id, $worker5->id]);
 $p5t10 = Task::create(['project_id' => $p5->id, 'name' => 'Sistema de seguridad', 'priority' => 'high', 'start_date' => '2026-09-16', 'end_date' => '2026-10-10']); $p5t10->users()->attach($worker1->id);
 $p5t11 = Task::create(['project_id' => $p5->id, 'name' => 'Pruebas de funcionamiento', 'priority' => 'urgent', 'start_date' => '2026-10-15', 'end_date' => '2026-11-05']); $p5t11->users()->attach($jefe->id);
 
 
         /**
-         * En esta fase se generan 15 proyectos adicionales. 
+         * En esta fase se generan 3 proyectos adicionales. 
          * Se utiliza un bucle manual en lugar de métodos encadenados de Factory para:
          * 1. Garantizar que el 'status' y 'priority' no choquen con Enums estrictos.
          * 2. Asegurar que cada Tarea tenga una relación real en la tabla pivote con usuarios del Staff.
          */
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             // Creación del proyecto con estado controlado
             $project = Project::factory()->create([
                 'status' => 'pending' 
             ]);
 
             if ($project) {
-                // Para cada proyecto, generamos un set de 6 tareas
-                for ($j = 1; $j <= 6; $j++) {
+                // Para cada proyecto, generamos un set de 2 tareas
+                for ($j = 1; $j <= 2; $j++) {
                     $task = Task::factory()->create([
                         'project_id' => $project->id,
                         'priority' => 'medium' 

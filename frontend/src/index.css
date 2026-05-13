@@ -38,6 +38,7 @@
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
   
   /* Other */
@@ -639,6 +640,7 @@ input, textarea, select {
   flex-wrap: wrap;
 }
 
+
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -677,7 +679,6 @@ input, textarea, select {
   color: var(--color-text-muted);
   font-size: 0.88rem;
 }
-
 /* ============================================
    PROJECTS PAGE
    ============================================ */

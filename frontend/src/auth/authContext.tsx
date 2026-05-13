@@ -19,9 +19,6 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 /**
  * Proveedor de contexto que envuelve la aplicación para gestionar el estado global de auth.
  * 
- * @param {Object} props - Propiedades del componente.
- * @param {React.ReactNode} props.children - Componentes hijos que tendrán acceso al contexto.
- * @returns {JSX.Element} El componente Provider de React.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initial: AuthSession | null = authStorage.get();
@@ -67,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     /**
-     * Memoriza el valor del contexto para evitar recreaciones de objeto innecesarias.
+     * Memoriza el valor
      */
    const value = useMemo<AuthContextValue>(() => {
     return {

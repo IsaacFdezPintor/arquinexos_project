@@ -15,6 +15,7 @@ import { User, Folder, Calendar, MapPin, DollarSign, FileText, ArrowLeft, Edit2,
  * 
  */
 function ProjectDetailPage() {
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -78,7 +79,6 @@ function ProjectDetailPage() {
 
   /** USO DE API Externa */
   const googleMapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(project.address || "")}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
-
   return (
     <div className="session-detail">
       <div className="session-detail__header">
@@ -155,7 +155,7 @@ function ProjectDetailPage() {
             >
               <iframe
                 width="100%"
-                height="100%"
+                height="300%"
                 src={googleMapsUrl}
                 title="Ubicación"
                 style={{ border: 0, flex: 1, minHeight: '300px' }}
@@ -200,13 +200,15 @@ function ProjectDetailPage() {
       </div>
 
       <div className="session-detail__tasks">
-        <TaskList 
-          projectId={project.id} 
-          userId={user!=null ? user.id : undefined} 
-          canManage={canManageTasksAndProject}
-          onTaskEdit={handleTaskEdit}           
-          showAllTeamTasks={showTeamTasks}
-        />
+        {project?.id && (
+          <TaskList 
+            projectId={project.id} 
+            userId={!showTeamTasks && user ? user.id : undefined}
+            canManage={canManageTasksAndProject}
+            onTaskEdit={handleTaskEdit}           
+            showAllTeamTasks={showTeamTasks}
+          />
+        )}
       </div>
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />

@@ -51,7 +51,6 @@ function formatPrice(price: number): string {
 
 /**
  * Componente de tarjeta para visualizar un resumen de un proyecto.
- * Incluye metadatos como cliente, tipo, fecha y presupuesto, además de acciones de navegación y gestión.
  * 
  * @param {ProjectCardProps} props - Propiedades del componente.
  * @param {Project} props.project - Datos del proyecto.
@@ -59,7 +58,7 @@ function formatPrice(price: number): string {
  * @param {Function} props.onEdit - Callback para edición.
  * @param {boolean} [props.canManage=false] - Permiso para mostrar acciones de administrador.
  * 
- * @returns {JSX.Element} Una tarjeta interactiva con la información del proyecto.
+ * @returns {JSX.Element} Una tarjeta con la información del proyecto.
  */
 function ProjectCard({ project, onDelete, onEdit, canManage = false }: ProjectCardProps) {
   

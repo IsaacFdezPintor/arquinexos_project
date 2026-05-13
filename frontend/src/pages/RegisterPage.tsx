@@ -5,6 +5,8 @@ import { AuthService } from "../services/authService";
 import { isAxiosError } from "axios";
 import { Mail, Lock, User, Shield, ArrowLeft } from "lucide-react";
 import Button from "../components/Button/Button";
+import { ToastContainer } from "../components/Toast/Toast";
+import { useToast } from "../components/Toast/useToast";
 
 const authService = AuthService;
 
@@ -17,6 +19,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState("worker");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { toasts, addToast, removeToast } = useToast();
 
   const handleSubmit = async () => {
     setError("");
@@ -34,10 +37,11 @@ export default function RegisterPage() {
     setLoading(true);
     
     try {
-      const res = await authService.register(email, password, name, role);
-      login({ token: res.token, user: res.user });
-      navigate("/projects");
-    } catch (err) {
+  await authService.register(email, password, name, role);
+  navigate("/team"); 
+          addToast("Usuario creado!", "success");
+
+      } catch (err) {
       if (isAxiosError(err) && err.response?.status === 422) {
         setError("Error de validación: " + (err.response.data.message || "Revisa los datos ingresados"));
       } else {
@@ -151,6 +155,8 @@ export default function RegisterPage() {
         />
 
       </form>
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
+
   );
 }

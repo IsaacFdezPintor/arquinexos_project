@@ -22,7 +22,6 @@ type UseToastResult = {
 
 /**
  * Hook personalizado para gestionar el estado de un sistema de notificaciones..
- * Proporciona métodos para añadir y eliminar mensajes de forma eficiente.
  * 
  * @returns {UseToastResult} Funciones y estado para controlar los mensajes de feedback.
  */

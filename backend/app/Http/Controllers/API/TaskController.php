@@ -71,24 +71,29 @@ class TaskController extends Controller
 
     // --- LÓGICA PARA RELACIÓN N:M ---
     if (!empty($userIds)) {
-        // Buscamos si existe alguna tarea que...
-        $overlap = Task::whereHas('users', function($q) use ($userIds) {
-                // ...tenga a alguno de los usuarios que queremos asignar
+        // Buscar tareas que solapan
+        $conflictingTask = Task::whereHas('users', function($q) use ($userIds) {
                 $q->whereIn('users.id', $userIds);
             })
             ->where(function ($query) use ($validated) {
-                // ...y que sus fechas choquen con las nuevas
                 $query->where(function ($q) use ($validated) {
                     $q->where('start_date', '<=', $validated['end_date'])
                       ->where('end_date', '>=', $validated['start_date']);
                 });
-            })->exists();
+            })
+            ->with('users')
+            ->first();
 
-        if ($overlap) {
+        if ($conflictingTask) {
+            // Buscar el usuario en conflicto
+            $conflictingUser = $conflictingTask->users->first(function($u) use ($userIds) {
+                return in_array($u->id, $userIds);
+            });
             return response()->json([
-                'error' => 'Conflicto de agenda',
-                'message' => 'Uno o más usuarios ya tienen tareas asignadas en este rango de fechas.'
-            ], 422); // El test recibirá el 422 y pasará a verde
+                'error' => 'El usuario ' . ($conflictingUser ? $conflictingUser->name : 'desconocido') . ' ya tiene asignada la tarea "' . $conflictingTask->name . '" en este rango de fechas.',
+                'user_id' => $conflictingUser ? $conflictingUser->id : null,
+                'task_id' => $conflictingTask->id,
+            ], 422);
         }
     }
 
@@ -160,7 +165,8 @@ class TaskController extends Controller
         // Validación completa para el Jefe
         $validated = $request->validate([
             'project_id' => ['required', 'exists:projects,id'],
-           <
+                'user_ids'   => ['nullable', 'array'],
+                'user_ids.*' => ['exists:users,id'],
             'name' => ['required', 'string', 'max:255'],
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],

@@ -1,51 +1,35 @@
-/* Imagen del proyecto */
-.scard-img-wrapper {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #f6f6f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-bottom: 1px solid var(--color-border-light);
-}
-
-.scard-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-/* =============================================
-   SessionCard.css — Tarjeta de Proyecto Mejorada
-   ============================================= */
+/* ============================================
+   ProjectCard Component Styles
+   ============================================ */
 
 .scard {
   display: flex;
   flex-direction: column;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .scard:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #0d9488;
 }
 
-/* Encabezado con insignia de estado */
+/* Card Header */
 .scard-header {
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, var(--color-primary-bg) 0%, rgba(13, 148, 136, 0.05) 100%);
-  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.75rem 1.25rem;
+  background: #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* Cuerpo de la tarjeta */
+/* Card Body */
 .scard-body {
   padding: 1.25rem;
   flex: 1;
@@ -57,7 +41,7 @@
 .scard-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: #111827;
   cursor: pointer;
   transition: color 0.2s ease;
   display: flex;
@@ -67,68 +51,66 @@
 }
 
 .scard-title:hover {
-  color: var(--color-primary);
+  color: #0d9488;
 }
 
 .scard-client {
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: #6b7280;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin: 0;
 }
 
-/* Metadatos */
 .scard-meta {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.75rem;
-  font-size: 0.85rem;
+  flex-wrap: wrap;
   margin: 0.25rem 0;
 }
 
 .category-tag {
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  background: #d1fae5;
+  color: #065f46;
   padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  font-size: 0.85rem;
 }
 
 .scard-date {
-  color: var(--color-text-secondary);
+  color: #6b7280;
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  font-size: 0.85rem;
 }
 
-/* Ubicación */
 .scard-location {
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: #6b7280;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin: 0.25rem 0 0.5rem 0;
 }
 
-/* Pie de la tarjeta */
 .scard-footer {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid #f3f4f6;
   margin-top: auto;
 }
 
 .scard-price {
   font-weight: 700;
-  color: var(--color-primary);
+  color: #0d9488;
   font-size: 1.1rem;
   display: flex;
   align-items: center;
@@ -136,10 +118,9 @@
 }
 
 .scard-actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .scard-actions button {
@@ -148,32 +129,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  min-width: 80px;
 }
 
-@media (max-width: 640px) {
-  .scard-title {
-    font-size: 1rem;
-  }
+/* ============================================
+   Responsive Si la pantalla mide 600 píxeles de ancho o menos ajusta los botones y el meta para que se vean bien en móviles
+   ============================================ */
 
-  .scard-body {
-    padding: 1rem;
-  }
-
-  .scard-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .scard-actions {
-    justify-content: stretch;
-  }
-
+@media (max-width: 600px) {
   .scard-actions button {
-    flex: 1;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
   }
-}
 
-.scard-actions button + button {
-  margin-left: 0.5rem;
+  .scard-meta {
+    gap: 0.5rem;
+  }
 }

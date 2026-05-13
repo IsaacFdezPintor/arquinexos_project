@@ -39,7 +39,7 @@ function ProjectList({
 }: ProjectListProps) {
 
   /**
-   * Si el array está vacío, devolvemos un estado visual informativo en lugar de un contenedor vacío.
+   * Si el array está vacío, devolvemos un mensaje de aviso 
    */
   if (!projects.length) {
     return (
@@ -52,9 +52,7 @@ function ProjectList({
   return (
     <div className="project-grid">
       {/* 
-        Mapeo de Proyectos:
-        Es fundamental usar p.id como 'key' para que React optimice el re-renderizado
-        cuando la lista cambie (filtros, borrados, etc.).
+        Mapeo de Proyectos
       */}
       {projects.map((p) => (
         <ProjectCard

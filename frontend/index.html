@@ -1,13 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- Meta Tags - Codificación y Viewport -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="Calle.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudioSnap – Sesiones Fotográficas</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="GrantTrap - Plataforma de gestión integral de proyectos de arquitectura. Organiza proyectos, tareas y equipos de forma eficiente." />
+    <meta name="keywords" content="arquitectura, gestión de proyectos, tareas, equipo, colaboración" />
+    <meta name="author" content="Isaac Fernández Pintor" />
+    <meta name="language" content="es" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph (redes sociales) -->
+    <meta property="og:title" content="GrantTrap - Gestión de Proyectos" />
+    <meta property="og:description" content="Plataforma de gestión integral de proyectos de arquitectura" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Accesibilidad y Seguridad -->
+    <meta name="color-scheme" content="light dark" />
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  connect-src 'self' http://localhost:9000;
+  frame-src https://www.google.com https://maps.google.com;
+" />    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/sd.svg" />
+    <link rel="apple-touch-icon" href="/sd.svg" />
+    
+    <!-- Tema de Color -->
+    <meta name="theme-color" content="#0d9488" />
+    
+    <!-- Título -->
+    <title>GrantTrap - Gestión de Proyectos de Arquitectura</title>
   </head>
-  <body>
-    <div id="root"></div>
+  <body role="application">
+    <!-- Root element for React SPA -->
+    <div id="root" role="main" aria-label="Aplicación principal de GrantTrap"></div>
+    
+    <!-- Main application script -->
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Skip to main content link (for keyboard navigation) -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const skipLink = document.createElement('a');
+        skipLink.href = '#root';
+        skipLink.textContent = 'Ir al contenido principal';
+        skipLink.style.cssText = 'position: absolute; top: -40px; left: 0; background: #000; color: white; padding: 8px; text-decoration: none; z-index: 100;';
+        skipLink.addEventListener('focus', () => {
+          skipLink.style.top = '0';
+        });
+        skipLink.addEventListener('blur', () => {
+          skipLink.style.top = '-40px';
+        });
+        document.body.insertBefore(skipLink, document.body.firstChild);
+      });
+    </script>
   </body>
 </html>

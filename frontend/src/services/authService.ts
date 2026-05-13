@@ -123,7 +123,9 @@ export const AuthService = {
    * Utiliza la función isAxiosError de axios para detectar
    * si un error proviene de una petición HTTP.
    * 
-   * @type {Function}
+   * @param {unknown} error - Error a verificar
+   * 
+   * @returns {boolean} true si es un error de Axios, false en caso contrario
    * 
    * @example
    * try {

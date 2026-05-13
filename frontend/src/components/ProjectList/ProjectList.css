@@ -1,7 +1,3 @@
-/* =============================================
-   SessionList.css — Lista de Proyectos
-   ============================================= */
-
 .session-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
@@ -14,7 +10,7 @@
   justify-content: center;
   align-items: center;
   min-height: 300px;
-  color: var(--color-text-muted);
+  color: #9ca3af;
   font-size: 1rem;
 }
 
@@ -30,7 +26,7 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: var(--color-text-muted);
+  color: #9ca3af;
   text-align: center;
 }
 

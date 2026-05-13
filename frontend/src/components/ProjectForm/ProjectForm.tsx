@@ -225,9 +225,7 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
       </fieldset>
 
       <div className="form-actions">
-        <button type="submit" className="custom-btn btn-verde"> 
-          {selectedProject ? "Actualizar Proyecto" : "Crear Proyecto"}
-        </button>
+        <Button text={selectedProject ? "Actualizar Proyecto" : "Crear Proyecto"} onClick={() => {}} style="verde" /> 
         <Button
           text="Cancelar"
           onClick={cancelUpdateProject}

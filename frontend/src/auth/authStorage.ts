@@ -6,8 +6,7 @@ import type { AuthSession } from "../types/Auth";
 const CLAVE = "auth_session";
 
 /**
- * Objeto de utilidad para gestionar la persistencia de la sesión de autenticación
- * en el `localStorage` del navegador.
+ * Objeto para gestionar la persistencia de la sesión de autenticación en el `localStorage` del navegador.
  */
 export const authStorage = {
     /**
@@ -31,7 +30,7 @@ export const authStorage = {
     /**
      * Persiste los datos de la sesión en el almacenamiento local.
      * 
-     * @param {AuthSession} session - El objeto de sesión (incluye usuario y token) a guardar.
+     * @param {AuthSession} session - El objeto de sesión a guardar.
      * @returns {void}
      */
     set(session: AuthSession): void {

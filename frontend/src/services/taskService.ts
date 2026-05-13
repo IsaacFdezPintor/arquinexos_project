@@ -48,6 +48,12 @@ export const taskService = {
    * @example
    * const tasks = await taskService.getAll();
    */
+  /**
+   * Obtiene todas las tareas paginadas.
+   * @param {number} page - Página a cargar
+   * @param {object} params - Otros filtros opcionales
+   * @returns {Promise<any>} Objeto con tareas y paginación
+   */
   getAll(): Promise<Task[]> {
     return http.get(API_URL).then((response) => {
       const tasks = Array.isArray(response.data)
@@ -56,7 +62,6 @@ export const taskService = {
       return tasks || [];
     });
   },
-
   /**
    * Obtiene todas las tareas de un proyecto específico.
    * 

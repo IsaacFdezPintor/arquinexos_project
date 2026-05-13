@@ -11,7 +11,6 @@ export type Project = {
   start_date: string;        // Fecha de inicio
   end_date?: string;         // Fecha de fin
   address?: string;          // Dirección
-  // image eliminado
   created_at?: string;
   updated_at?: string;
 };
