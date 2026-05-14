@@ -38,8 +38,7 @@ class UserFactory extends Factory
             // Establece el rol de trabajador como valor predeterminado
             'role' => 'worker',
             
-            // Genera una cadena aleatoria para la funcionalidad de "recordar sesión"
-            'remember_token' => Str::random(10),
+
         ];
     }
 }

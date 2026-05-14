@@ -135,8 +135,7 @@ getAll(page: number = 1): Promise<any> { // Cambiamos a any para recibir la meta
   /**
    * Actualiza un proyecto existente.
    * 
-   * Realiza una petición POST (como PATCH) a /api/projects/{id}
-   * con multipart/form-data. Solo los jefes pueden actualizar proyectos.
+   * Realiza una petición POST  /api/projects/{id}
    * 
    * Los mismos campos que en create() pueden ser actualizados.
    * 

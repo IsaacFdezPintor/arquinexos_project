@@ -117,24 +117,5 @@ export const AuthService = {
     return http.post("/auth/logout").then((r) => r.data);
   },
 
-  /**
-   * Verifica si un error es un error de Axios.
-   * 
-   * Utiliza la función isAxiosError de axios para detectar
-   * si un error proviene de una petición HTTP.
-   * 
-   * @param {unknown} error - Error a verificar
-   * 
-   * @returns {boolean} true si es un error de Axios, false en caso contrario
-   * 
-   * @example
-   * try {
-   *   await AuthService.login('user@example.com', 'wrong');
-   * } catch (error) {
-   *   if (AuthService.isAuthError(error)) {
-   *     console.log('Error de autenticación');
-   *   }
-   * }
-   */
   isAuthError: isAxiosError,
 };

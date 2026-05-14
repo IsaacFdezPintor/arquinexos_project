@@ -124,6 +124,14 @@ function ProjectDetailPage() {
             </div>
           </div>
 
+                  <div className="info-card">
+            <div className="info-card__icon"><Calendar size={20} /></div>
+            <div className="info-card__content">
+              <span className="info-card__label">Final</span>
+              <span className="info-card__value">{formatDate(project.end_date)}</span>
+            </div>
+          </div>
+
           <div className="info-card">
             <div className="info-card__icon"><DollarSign size={20} /></div>
             <div className="info-card__content">

@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         // Equipo base con credenciales fijas para facilitar el login en desarrollo
         $worker1 = User::create(['name' => 'Laura García', 'email' => 'laura@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
-        $worker2 = User::create(['name' => 'Miguel Torres', 'email' => 'miguel@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
+        $worker2 = User::create(['name' => 'Miguel López', 'email' => 'miguel@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
         $worker3 = User::create(['name' => 'Ana Ruiz', 'email' => 'ana@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
         $worker4 = User::create(['name' => 'Elena Belmonte', 'email' => 'elena@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
         $worker5 = User::create(['name' => 'Roberto Cano', 'email' => 'roberto@arquitectura.com', 'password' => Hash::make('worker123'), 'role' => 'worker']);
@@ -102,23 +102,6 @@ $p4t6 = Task::create(['project_id' => $p4->id, 'name' => 'Cubiertas y cerramient
 $p4t7 = Task::create(['project_id' => $p4->id, 'name' => 'Instalaciones técnicas', 'priority' => 'high', 'start_date' => '2025-06-25', 'end_date' => '2025-07-30']); $p4t7->users()->attach([$worker3->id, $worker4->id]);
 $p4t8 = Task::create(['project_id' => $p4->id, 'name' => 'Acabados interiores', 'priority' => 'medium', 'start_date' => '2025-08-01', 'end_date' => '2025-09-15']); $p4t8->users()->attach([$worker1->id, $worker3->id]);
 
-
-// PROYECTO 5: Nave Industrial
-$p5 = Project::create([
-'name' => 'Nave Logística Amazon', 'type' => 'industrial', 'client_name' => 'Inversiones Logísticas S.A.',
-'status' => 'pending', 'budget' => 890000, 'start_date' => '2026-03-10', 'end_date' => '2026-11-15',
-]);
-$p5t1 = Task::create(['project_id' => $p5->id, 'name' => 'Cimentación especial', 'priority' => 'high', 'start_date' => '2026-03-15', 'end_date' => '2026-04-10']); $p5t1->users()->attach([$worker2->id, $worker5->id]);
-$p5t2 = Task::create(['project_id' => $p5->id, 'name' => 'Diseño industrial', 'priority' => 'high', 'start_date' => '2026-03-10', 'end_date' => '2026-03-25']); $p5t2->users()->attach($jefe->id);
-$p5t3 = Task::create(['project_id' => $p5->id, 'name' => 'Estudio de cargas', 'priority' => 'urgent', 'start_date' => '2026-03-12', 'end_date' => '2026-03-20']); $p5t3->users()->attach([$worker1->id, $worker5->id]);
-$p5t4 = Task::create(['project_id' => $p5->id, 'name' => 'Estructura de acero', 'priority' => 'high', 'start_date' => '2026-04-15', 'end_date' => '2026-05-30']); $p5t4->users()->attach([$worker2->id, $worker4->id, $worker5->id]);
-$p5t5 = Task::create(['project_id' => $p5->id, 'name' => 'Cubierta industrial', 'priority' => 'high', 'start_date' => '2026-06-01', 'end_date' => '2026-06-25']); $p5t5->users()->attach([$worker1->id, $worker3->id]);
-$p5t6 = Task::create(['project_id' => $p5->id, 'name' => 'Puertas y accesos', 'priority' => 'medium', 'start_date' => '2026-06-28', 'end_date' => '2026-07-15']); $p5t6->users()->attach($worker3->id);
-$p5t7 = Task::create(['project_id' => $p5->id, 'name' => 'Sistema de climatización', 'priority' => 'high', 'start_date' => '2026-07-20', 'end_date' => '2026-08-20']); $p5t7->users()->attach([$worker4->id, $worker5->id]);
-$p5t8 = Task::create(['project_id' => $p5->id, 'name' => 'Instalación eléctrica', 'priority' => 'high', 'start_date' => '2026-07-25', 'end_date' => '2026-08-25']); $p5t8->users()->attach($worker2->id);
-$p5t9 = Task::create(['project_id' => $p5->id, 'name' => 'Red de tuberías', 'priority' => 'medium', 'start_date' => '2026-08-26', 'end_date' => '2026-09-15']); $p5t9->users()->attach([$worker3->id, $worker5->id]);
-$p5t10 = Task::create(['project_id' => $p5->id, 'name' => 'Sistema de seguridad', 'priority' => 'high', 'start_date' => '2026-09-16', 'end_date' => '2026-10-10']); $p5t10->users()->attach($worker1->id);
-$p5t11 = Task::create(['project_id' => $p5->id, 'name' => 'Pruebas de funcionamiento', 'priority' => 'urgent', 'start_date' => '2026-10-15', 'end_date' => '2026-11-05']); $p5t11->users()->attach($jefe->id);
 
 
         /**

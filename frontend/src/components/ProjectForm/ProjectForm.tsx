@@ -175,7 +175,7 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
 
           {/* Campos de Fecha e Iconografía de Dirección... */}
           <div className="form-group">
-            <label className="form-label"> <Calendar size={16} /> Fecha de Inicio 
+            <label className="form-label"> <Calendar size={16} /> Fecha de Inicio *
             </label>
             <input
               type="date"
