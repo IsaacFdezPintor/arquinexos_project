@@ -113,9 +113,9 @@ backend/
 │   └── Feature/
 │
 ├── .env.example   
-├── artisan         
-├── composer.json      
-└── README.md            
+├── artisan       
+├── composer.json    
+└── README.md          
 ```
 
 ---
@@ -332,8 +332,7 @@ GET /api/users/team               # Solo para jefes
 
 ```bash
 # Iniciar servidor de desarrollo
-php artisan serve
-# La API estará disponible en http://localhost:8000/api
+php artisan serve --port=9000
 
 # En otra terminal, ver logs en tiempo real
 php artisan tinker

@@ -108,7 +108,7 @@ docker-compose logs -f backend
 docker-compose exec backend php artisan migrate --force
 
 # 5. Crear datos de prueba (opcional)
-docker-compose exec backend php artisan db:seed
+docker-compose exec backend php artisan migrate:fresh --seed
 
 # 6. Acceder a la aplicación
 # Frontend:  http://localhost:5173
@@ -441,8 +441,6 @@ La guía de estilos está definida en:
 - **[frontend/src/index.css](frontend/src/index.css)** - Variables CSS, paleta de colores, tipografía, espaciados
 
 ---
-
-
 
 ## Autor
 
